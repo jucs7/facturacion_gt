@@ -1,0 +1,9 @@
+name: 'Facturación GT'
+type: module
+description: 'Módulo para enviar facturas electrónicas a la DIAN a través de la API de Aliaddo.'
+core_version_requirement: ^8 || ^9 || ^10
+package: Custom
+dependencies:
+  - drupal:serialization
+  - drupal:rest
+version: 1.0
