@@ -1,0 +1,8 @@
+facturacion_gt.enviar_factura:
+  path: '/facturacion-gt/enviar'
+  defaults:
+    _controller: '\Drupal\facturacion_gt\Controller\FacturacionGtController::enviarFactura'
+    _title: 'Enviar Factura'
+  requirements:
+    _permission: 'access content'
+
