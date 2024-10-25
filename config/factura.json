@@ -1,146 +1,162 @@
 {
-  "code": "01",
-  "format": "Estandar",
-  "emailSender": "",
-  "consecutive": "990004322",
-  "externalNumber": "",
-  "currencyCode": "COP",
-  "currencyRate": 0,
-  "date": "2020-1-23",
-  "dateDue": "2020-1-29",
-  "dateStart": "2020-1-23",
-  "dateEnd": "2020-1-29",
-  "typeOfOperation": "10",
-  "incoterms": "",
-  "deliveryTerms": "",
-  "terms": "",
-  "remark": "",
-  "observation": "",
-  "termDay": 0,
-  "paymentMeanCode": "48",
-  "branch": {
-    "name": "",
-    "address": "",
-    "phone": "",
-    "countryCode": "",
-    "countryName": "",
-    "departamentCode": "",
-    "departamentName": "",
-    "cityCode": "",
-    "cityName": ""
-  },
-  "resolution": {
-    "resolutionKey": "fc8eac422eba16e22ffd8c6f94b3f40a6e38162c",
-    "resolutionPrefix": "SETT",
-    "resolutionNumber": "18760000001",
-    "resolutionRangeInitial": "990000000",
-    "resolutionRangeFinal": "995000000",
-    "resolutionValidFrom": "2019-01-19",
-    "resolutionValidUntil": "2030-01-19"
-  },
-  "customer": {
-    "companyName": "Customer",
-    "personType": "1",
-    "regimeType": "48",
-    "firstName": "Customer",
-    "lastName": "Customer",
-    "identification": "000000001",
-    "digitCheck": "8",
-    "identificationTypeCode": "13",
-    "email": "email@email.com",
-    "phone": "",
-    "merchantRegistration": "",
-    "responsibleFor": "ZZ",
-    "responsibilities": "R-99-PN",
-    "economicActivities": "2824;2920",
-    "billingAddress": "KR con Calle",
-    "billingCountryName": "Colombia",
-    "billingCountryCode": "CO",
-    "billingRegionName": "Cundinamarca",
-    "billingRegionCode": "25",
-    "billingCityName": "Chipaque",
-    "billingCityCode": "25178",
-    "billingPostalCode": "",
-    "billingNeighborhood": "",
-    "billingPhone": "",
-    "billingContactName": "",
-    "shippingAddress": "",
-    "shippingCountryName": "",
-    "shippingCountryCode": "",
-    "shippingRegionName": "",
-    "shippingRegionCode": "",
-    "shippingCityName": "",
-    "shippingCityCode": "",
-    "shippingPostalCode": "",
-    "shippingNeighborhood": "",
-    "shippingPhone": "",
-    "shippingContactName": ""
-  },
-  "invoiceDetails": [{
-    "standardType": "",
-    "standardCode": "",
-    "itemCode": "0001",
-    "itemName": "Item",
-    "itemModel": "",
-    "description": "Item prueba",
-    "brandName": "",
-    "itemCodeSupplier": "",
-    "isPresent": false,
-    "unitMeasurementCode": "",
-    "unitMeasurementName": "",
-    "price": "1285.00",
-    "quantity": "2",
-    "discounts": [{
-      "name": "",
-      "type": "V",
-      "rate": 1,
-      "amount": 1
-    }],
-    "charges": [{
-      "name": "",
-      "type": "V",
-      "rate": 10,
-      "amount": 10
-    }],
-    "taxes": [{
-      "name": "Iva",
-      "code": "01",
-      "type": "F",
-      "rate": 10,
-      "amount": 10
-    }],
-    "withholdings": [{
-      "name": "ReteFuente",
-      "code": "06",
-      "type": "P",
-      "rate": 10,
-      "amount": 3.4
-    }],
-    "isvMandante": {
-      "name": "Mandante",
-      "identification": "000001",
-      "digitCheck": "8",
-      "identificationTypeCode": "13"
-    }
-  }],
-  "totals": {
-    "prepaymentAmount": 68,
-    "amount": 0
-  },
-  "discounts": [{
-    "name": "",
-    "type": "",
-    "rate": 0,
-    "amount": 0
-  }],
-  "charges": [{
-    "name": "",
-    "type": "",
-    "rate": 0,
-    "amount": 0
-  }],
-  "customFields": [{
-    "value": "666",
-    "key": "invoiceId"
-  }]
+    "code": "01",
+    "format": "Estandar",
+    "emailSender": "",
+    "consecutive": "990004322",
+    "externalNumber": "",
+    "currencyCode": "COP",
+    "currencyRate": 0,
+    "date": "2020-1-23",
+    "dateDue": "2020-1-29",
+    "dateStart": "2020-1-23",
+    "dateEnd": "2020-1-29",
+    "typeOfOperation": "10",
+    "incoterms": "",
+    "deliveryTerms": "",
+    "terms": "",
+    "remark": "",
+    "observation": "",
+    "termDay": 0,
+    "paymentMeanCode": "48",
+    "branch": {
+        "name": "",
+        "address": "",
+        "phone": "",
+        "countryCode": "",
+        "countryName": "",
+        "departamentCode": "",
+        "departamentName": "",
+        "cityCode": "",
+        "cityName": ""
+    },
+    "resolution": {
+        "resolutionKey": "fc8eac422eba16e22ffd8c6f94b3f40a6e38162c",
+        "resolutionPrefix": "SETT",
+        "resolutionNumber": "18760000001",
+        "resolutionRangeInitial": "990000000",
+        "resolutionRangeFinal": "995000000",
+        "resolutionValidFrom": "2019-01-19",
+        "resolutionValidUntil": "2030-01-19"
+    },
+    "customer": {
+        "companyName": "Empresa",
+        "personType": "1",
+        "regimeType": "48",
+        "identification": "987654321",
+        "digitCheck": "8",
+        "identificationTypeCode": "31",
+        "email": "email@email.com",
+        "phone": "",
+        "merchantRegistration": "",
+        "responsibleFor": "ZZ",
+        "responsibilities": "R-99-PN",
+        "economicActivities": "2824;2920",
+        "billingAddress": "KR con Calle",
+        "billingCountryName": "Colombia",
+        "billingCountryCode": "CO",
+        "billingRegionName": "Cundinamarca",
+        "billingRegionCode": "25",
+        "billingCityName": "Chipaque",
+        "billingCityCode": "25178",
+        "billingPostalCode": "",
+        "billingNeighborhood": "",
+        "billingPhone": "",
+        "billingContactName": "",
+        "shippingAddress": "",
+        "shippingCountryName": "",
+        "shippingCountryCode": "",
+        "shippingRegionName": "",
+        "shippingRegionCode": "",
+        "shippingCityName": "",
+        "shippingCityCode": "",
+        "shippingPostalCode": "",
+        "shippingNeighborhood": "",
+        "shippingPhone": "",
+        "shippingContactName": "",
+        "firstName": "",
+        "lastName": ""
+    },
+    "invoiceDetails": [
+        {
+            "standardType": "",
+            "standardCode": "",
+            "itemCode": "0001",
+            "itemName": "Item",
+            "itemModel": "",
+            "description": "Item prueba",
+            "brandName": "",
+            "itemCodeSupplier": "",
+            "isPresent": false,
+            "unitMeasurementCode": "",
+            "unitMeasurementName": "",
+            "price": "1285.00",
+            "quantity": "2",
+            "discounts": [
+                {
+                    "name": "",
+                    "type": "V",
+                    "rate": 1,
+                    "amount": 1
+                }
+            ],
+            "charges": [
+                {
+                    "name": "",
+                    "type": "V",
+                    "rate": 10,
+                    "amount": 10
+                }
+            ],
+            "taxes": [
+                {
+                    "name": "Iva",
+                    "code": "01",
+                    "type": "F",
+                    "rate": 10,
+                    "amount": 10
+                }
+            ],
+            "withholdings": [
+                {
+                    "name": "ReteFuente",
+                    "code": "06",
+                    "type": "P",
+                    "rate": 10,
+                    "amount": 3.4
+                }
+            ],
+            "isvMandante": {
+                "name": "Mandante",
+                "identification": "000001",
+                "digitCheck": "8",
+                "identificationTypeCode": "13"
+            }
+        }
+    ],
+    "totals": {
+        "prepaymentAmount": 68,
+        "amount": 0
+    },
+    "discounts": [
+        {
+            "name": "",
+            "type": "",
+            "rate": 0,
+            "amount": 0
+        }
+    ],
+    "charges": [
+        {
+            "name": "",
+            "type": "",
+            "rate": 0,
+            "amount": 0
+        }
+    ],
+    "customFields": [
+        {
+            "value": "666",
+            "key": "invoiceId"
+        }
+    ]
 }
