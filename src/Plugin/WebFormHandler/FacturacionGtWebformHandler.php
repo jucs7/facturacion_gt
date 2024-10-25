@@ -6,7 +6,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\WebformSubmissionInterface;
 use GuzzleHttp\Client;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * Webform submission handler for Facturacion GT.
@@ -65,33 +65,14 @@ class FacturacionGtWebformHandler extends WebformHandlerBase {
 
     // Guardar los nuevos datos en el archivo JSON.
     file_put_contents($json_file, json_encode($factura_data, JSON_PRETTY_PRINT));
-    
-    // Enviar la factura a la API
-    $this->enviarFactura($factura_data);
 
-    // Mensaje de éxito.
-    // \Drupal::messenger()->addMessage('La factura se ha actualizado correctamente.');
-
-  }
-
-  /**
-   * Envía los datos de la factura a la API.
-   *
-   * @param array $factura_data
-   *   Datos de la factura a enviar.
-   */
-  private function enviarFactura(array $factura_data) {
-    // Obtener el servicio HTTP Client.
-    $client = new Client();
-
-    // URL de la API.
-    $api_url = 'https://isv.aliaddo.net/api/v1/public/documents/invoice/test';
-
+    // Enviar los datos aactualizados a la API
     try {
-      // Realizar request por metodo POST
+      $client = new Client();
+      $api_url = 'https://isv.aliaddo.net/api/v1/public/documents/invoice/test';
       $response = $client->post($api_url, [
         'json' => $factura_data,
-        // Adicionar cabeceras de autenticación con token bearer
+        // Adicionar cabeceras de autenticación con token Bearer
         'headers' => [
           'x-api-key' => 'key-3440faa4a3b2419aa1c3ac3b2a457b8d-031610',
           'content-type' => 'application/json',
@@ -103,27 +84,17 @@ class FacturacionGtWebformHandler extends WebformHandlerBase {
       // Decodificar la respuesta de la API
       $body = json_decode($response->getBody(), TRUE);
 
-      // Mostrar respuesta o error si hubo alguno
+      // Verificar el estado de la respuesta
       if ($response->getStatusCode() == 200) {
-        return new JsonResponse($body);
-
-        \Drupal::messenger()->addMessage('La factura se ha enviado correctamente.');
+        \Drupal::messenger()->addMessage('La factura ha sido enviada correctamente.' . $response->getBody());
       }
       else {
-        return new JsonResponse([
-          'status' => 'error',
-          'message' => 'Error al enviar la factura',
-          'response' => $body,
-        ]);
-
-        \Drupal::messenger()->addError('Se ha producido un error al enviar la factura.');
+        \Drupal::messenger()->addError('Error al enviar la factura.');
       }
     }
-    catch (\Exception $e) {
-      return new JsonResponse([
-        'status' => 'error',
-        'message' => 'Excepción: ' . $e->getMessage(),
-      ]);
+    catch (RequestException $e) {
+      \Drupal::messenger()->addError('Ocurrió un error al intentar enviar la factura.');
     }
   }
+
 }
