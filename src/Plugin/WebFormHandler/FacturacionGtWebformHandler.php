@@ -5,8 +5,7 @@ namespace Drupal\facturacion_gt\Plugin\WebformHandler;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\WebformSubmissionInterface;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
+use Drupal\facturacion_gt\Plugin\WebFormHandler\FacturaDataHandler;
 
 /**
  * Webform submission handler for Facturacion GT.
@@ -42,83 +41,22 @@ class FacturacionGtWebformHandler extends WebformHandlerBase {
     // Obtener los valores enviados en el Webform.
     $values = $webform_submission->getData();
 
-    // Ingresar valores en la factura
-    // Comprobar si es Persona Natural o Jurídica.
-    if (!empty($values['persona_natural'])) {
-      // Si es Persona Natural
-      $factura_data['customer']['companyName'] = $values['nombres'] . ' ' . $values['apellidos'];
-      $factura_data['customer']['personType'] = '2';
-      $factura_data['customer']['firstName'] = $values['nombres'];
-      $factura_data['customer']['lastName'] = $values['apellidos'];
-      $factura_data['customer']['identification'] = $values['identificacion'];
-      $factura_data['customer']['identificationTypeCode'] = '13';
-    }
-    elseif (!empty($values['persona_juridica'])) {
-      // Si es Persona Jurídica
-      $factura_data['customer']['companyName'] = $values['razon_social'];
-      $factura_data['customer']['personType'] = '1';
-      $factura_data['customer']['identification'] = $values['nit'];
-      $factura_data['customer']['identificationTypeCode'] = '31';
-      // Limpiar los campos de Persona Natural.
-      $factura_data['customer']['firstName'] = "";
-      $factura_data['customer']['lastName'] = "";
-    }
-
-    $factura_data['customer']['consecutive'] = $values['consecutivo'];
-    $factura_data['customer']['email'] = $values['email'];
-    $factura_data['customer']['phone'] = $values['telefono'];
-
-    // Obtener productos
-    $productos = $values['productos_composite'];
-    $invoice_details = $factura_data['invoiceDetails'];
-    $invoice_details = array_slice($invoice_details, 0, 1);
-    
-    // Ingresar valores de productos
-    for ($i = 0; $i < count($productos); $i++) {
-      $invoice_details[$i]['itemCode'] = $productos[$i]['codigo_item'];
-      $invoice_details[$i]['itemName'] = $productos[$i]['nombre_item'];
-      $invoice_details[$i]['price'] = $productos[$i]['precio_item'];
-      $invoice_details[$i]['quantity'] = $productos[$i]['cantidad_item'];
-
-      // Verificar si hay más productos y agregarlo
-      if ($i != count($productos) - 1) {
-        $invoice_details[] = $invoice_details[$i];
-      }
-    }
-
-    $factura_data['invoiceDetails'] = $invoice_details;
+    // Utilizar FacturaDataHandler para ingresar valores en la factura.
+    $facturaHandler = new FacturaDataHandler();
+    $factura_data = $facturaHandler->prepareFacturaData($values, $factura_data);
 
     // Guardar los nuevos datos en el archivo JSON.
     file_put_contents($json_file, json_encode($factura_data, JSON_PRETTY_PRINT));
 
-    // Enviar los datos aactualizados a la API
-    try {
-      $client = new Client();
-      $api_url = 'https://isv.aliaddo.net/api/v1/public/documents/invoice/test';
-      $response = $client->post($api_url, [
-        'json' => $factura_data,
-        // Adicionar cabeceras de autenticación con token Bearer
-        'headers' => [
-          'x-api-key' => 'key-3440faa4a3b2419aa1c3ac3b2a457b8d-031610',
-          'content-type' => 'application/json',
-          'cache-control' => 'no-cache',
-          'accept' => 'application/json',
-        ],
-      ]);
+    // Enviar los datos actualizados a la API.
+    $apiClient = new ApiClient();
+    $response = $apiClient->enviarFactura($factura_data);
 
-      // Decodificar la respuesta de la API
-      $body = json_decode($response->getBody(), TRUE);
-
-      // Verificar el estado de la respuesta
-      if ($response->getStatusCode() == 200) {
-        \Drupal::messenger()->addMessage('La factura ha sido enviada correctamente.' . $response->getBody());
-      }
-      else {
-        \Drupal::messenger()->addError('Error al enviar la factura.');
-      }
-    }
-    catch (RequestException $e) {
-      \Drupal::messenger()->addError('Ocurrió un error al intentar enviar la factura.');
+    // Manejar la respuesta de la API
+    if ($response['success']) {
+      \Drupal::messenger()->addMessage($response['message']);
+    } else {
+      \Drupal::messenger()->addError($response['message']);
     }
   }
 
