@@ -5,6 +5,9 @@ namespace Drupal\facturacion_gt\Plugin\WebformHandler;
 class FacturaDataHandler {
 
   public function prepareFacturaData(array $values, array $factura) {
+    // Inicializar precio total
+    $amount = 0;
+
     // Ingresar valores en la factura
     if (!empty($values['persona_natural'])) {
       // Si es Persona Natural
@@ -26,7 +29,7 @@ class FacturaDataHandler {
       $factura['customer']['lastName'] = "";
     }
 
-    $factura['customer']['consecutive'] = $values['consecutivo'];
+    $factura['consecutive'] = $values['consecutivo'];
     $factura['customer']['email'] = $values['email'];
     $factura['customer']['phone'] = $values['telefono'];
 
@@ -42,6 +45,9 @@ class FacturaDataHandler {
       $invoice_details[$i]['price'] = $productos[$i]['precio_item'];
       $invoice_details[$i]['quantity'] = $productos[$i]['cantidad_item'];
 
+      // Sumar al total
+      $amount += floatval($productos[$i]['precio_item']) * floatval($productos[$i]['cantidad_item']);
+
       // Verificar si hay más productos y agregarlo
       if ($i != count($productos) - 1) {
         $invoice_details[] = $invoice_details[$i];
@@ -49,6 +55,7 @@ class FacturaDataHandler {
     }
 
     $factura['invoiceDetails'] = $invoice_details;
+    $factura['totals']['amount'] = $amount;
 
     return $factura;
   }
