@@ -42,6 +42,7 @@ class FacturacionGtWebformHandler extends WebformHandlerBase {
     // Obtener los valores enviados en el Webform.
     $values = $webform_submission->getData();
 
+    // Ingresar valores en la factura
     // Comprobar si es Persona Natural o Jurídica.
     if (!empty($values['persona_natural'])) {
       // Si es Persona Natural
@@ -61,6 +62,37 @@ class FacturacionGtWebformHandler extends WebformHandlerBase {
       // Limpiar los campos de Persona Natural.
       $factura_data['customer']['firstName'] = "";
       $factura_data['customer']['lastName'] = "";
+    }
+
+    $factura_data['customer']['consecutive'] = $values['consecutivo'];
+    $factura_data['customer']['email'] = $values['email'];
+    $factura_data['customer']['phone'] = $values['telefono'];
+
+    // Obtener productos
+    $invoice_details = $factura_data['invoiceDetails'];
+    $productos = $values['productos_composite'];
+    
+    $invoice_details[0]['itemCode'] = $productos[0]['codigo_item'];
+    $invoice_details[0]['itemName'] = $productos[0]['nombre_item'];
+    $invoice_details[0]['price'] = $productos[0]['precio_item'];
+    $invoice_details[0]['quantity'] = $productos[0]['cantidad_item'];
+
+    if (count($productos) > 1) {
+      for ($i = 1; $i < count($productos); $i++) {
+        $producto = $productos[$i];
+
+        // Duplicar el primer elemento de invoiceDetails y asignar valores
+        $nuevoProducto = $invoice_details[0];
+         
+        $nuevoProducto["itemCode"] = $producto["codigo_item"];
+        $nuevoProducto["itemName"] = $producto["nombre_item"];
+        $nuevoProducto["price"] = $producto["precio_item"];
+        $nuevoProducto["quantity"] = $producto["cantidad_item"];
+
+        // Agregar el nuevo producto a invoice details
+        $invoice_details[] = $nuevoProducto;
+        $factura_data['invoiceDetails'] = $invoice_details;
+      } 
     }
 
     // Guardar los nuevos datos en el archivo JSON.
