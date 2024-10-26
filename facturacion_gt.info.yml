@@ -6,4 +6,5 @@ package: Custom
 dependencies:
   - drupal:serialization
   - drupal:rest
+  - webform:webform
 version: 1.0
