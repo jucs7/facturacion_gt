@@ -5,7 +5,7 @@ namespace Drupal\facturacion_gt\Plugin\WebformHandler;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\WebformSubmissionInterface;
-use Drupal\facturacion_gt\Plugin\WebFormHandler\FacturaDataHandler;
+use Drupal\facturacion_gt\Plugin\WebformHandler\FacturaDataHandler;
 
 /**
  * Webform submission handler for Facturacion GT.
