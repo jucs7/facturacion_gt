@@ -16,11 +16,13 @@ description: ''
 categories: {  }
 elements: |-
   consecutivo:
-    '#type': number
+    '#type': textfield
     '#title': Consecutivo
     '#title_display': invisible
     '#placeholder': Consecutivo
+    '#disabled': true
     '#required': true
+    '#default_value': '990004322'
   cliente:
     '#type': label
     '#title': Cliente
