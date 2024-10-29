@@ -29,7 +29,6 @@ class FacturaDataHandler {
       $factura['customer']['lastName'] = "";
     }
 
-    $factura['consecutive'] = $values['consecutivo'];
     $factura['customer']['email'] = $values['email'];
     $factura['customer']['phone'] = $values['telefono'];
 
