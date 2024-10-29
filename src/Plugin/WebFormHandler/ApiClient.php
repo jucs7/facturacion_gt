@@ -33,6 +33,7 @@ class ApiClient {
       return $this->handleResponse($response);
     } catch (RequestException $e) {
       // Manejo de excepciones
+      \Drupal::logger('facturacion_gt')->error('Ocurrió un error al intentar enviar la factura: @message', ['@message' => $e->getMessage()]);
       return [
         'success' => false,
         'message' => 'Ocurrió un error al intentar enviar la factura: ' . $e->getMessage(),
@@ -46,12 +47,14 @@ class ApiClient {
 
     // Verificar el estado de la respuesta
     if ($response->getStatusCode() == 200) {
+      \Drupal::logger('facturacion_gt')->info('La factura ha sido enviada correctamente. @response', ['@response' => json_encode($body)]);
       return [
         'success' => true,
         'message' => 'La factura ha sido enviada correctamente.',
         'data' => $body,
       ];
     } else {
+      \Drupal::logger('facturacion_gt')->error('Error al enviar la factura. @status', ['@status' => $response->getStatusCode()]);
       return [
         'success' => false,
         'message' => 'Error al enviar la factura.',
