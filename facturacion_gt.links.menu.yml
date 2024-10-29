@@ -1,6 +1,6 @@
 facturacion_gt.settings:
   title: 'Facturación GT Settings'
   description: 'Configurar valores para facturación.'
-  parent: system.admin_config
+  parent: system.admin_config_system
   route_name: facturacion_gt.settings_form
   weight: 100
