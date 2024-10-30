@@ -28,7 +28,7 @@ class FacturacionGtInvoiceSettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
-    $config = $this->config('facturacion_gt.settings');
+    $config = $this->config('facturacion_gt.invoice_settings');
 
     $form['resolution'] = [
       '#type' => 'fieldset',
