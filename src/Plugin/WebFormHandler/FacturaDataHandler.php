@@ -8,6 +8,13 @@ class FacturaDataHandler {
     // Inicializar precio total
     $amount = 0;
 
+    // Fecha
+    $date = date('Y-m-d');
+    $factura['date'] = $date;
+    $factura['dateDue'] = $date;
+    $factura['dateStart'] = $date;
+    $factura['dateEnd'] = $date;
+
     // Ingresar valores en la factura
     if (!empty($values['persona_natural'])) {
       // Si es Persona Natural
@@ -55,6 +62,21 @@ class FacturaDataHandler {
 
     $factura['invoiceDetails'] = $invoice_details;
     $factura['totals']['amount'] = $amount;
+
+    // Obtener valores de la configuración.
+    $config = \Drupal::configFactory()->getEditable('facturacion_gt.invoice_settings');
+
+    // Consecutivo
+    $factura['consecutive'] = $config->get('consecutive');
+
+    // Datos de resolución
+    $factura['resolution']['resolutionKey'] = $config->get('resolutionKey');
+    $factura['resolution']['resolutionPrefix'] = $config->get('resolutionPrefix');
+    $factura['resolution']['resolutionNumber'] = $config->get('resolutionNumber');
+    $factura['resolution']['resolutionRangeInitial'] = $config->get('resolutionRangeInitial');
+    $factura['resolution']['resolutionRangeFinal'] = $config->get('resolutionRangeFinal');
+    $factura['resolution']['resolutionValidFrom'] = $config->get('resolutionValidFrom');
+    $factura['resolution']['resolutionValidUntil'] = $config->get('resolutionValidUntil');
 
     return $factura;
   }
