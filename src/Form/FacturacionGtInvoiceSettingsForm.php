@@ -67,7 +67,7 @@ class FacturacionGtInvoiceSettingsForm extends ConfigFormBase {
 
     $form['resolution']['resolutionRangeFinal'] = [
       '#type' => 'number',
-      '#title' => 'Rango inicial',
+      '#title' => 'Rango final',
       '#description' => 'Rango final de facturación',
       '#default_value' => $config->get('resolutionRangeFinal'),
       '#min' => 0,
