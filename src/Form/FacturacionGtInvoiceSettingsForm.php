@@ -40,18 +40,21 @@ class FacturacionGtInvoiceSettingsForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => 'Clave de resolución',
       '#description' => 'Clave técnica de resolución de numeración de la DIAN',
+      '#default_value' => $config->get('resolutionKey'),
     ];
     
     $form['resolution']['resolutionPrefix'] = [
       '#type' => 'textfield',
       '#title' => 'Prefijo de resolución',
       '#description' => 'Prefijo de numeración autorizado por la DIAN',
+      '#default_value' => $config->get('resolutionPrefix'),
     ];
     
     $form['resolution']['resolutionNumber'] = [
       '#type' => 'number',
       '#title' => 'Número de resolución',
       '#description' => 'No. de la resolución',
+      '#default_value' => $config->get('resolutionNumber'),
     ];
 
     $form['resolution']['resolutionRangeInitial'] = [
@@ -74,12 +77,14 @@ class FacturacionGtInvoiceSettingsForm extends ConfigFormBase {
       '#type' => 'date',
       '#title' => 'Fecha inicial',
       '#description' => 'Fecha inicial de validación de facturación',
+      '#default_value' => $config->get('resolutionValidFrom'),
     ];
 
     $form['resolution']['resolutionValidUntil'] = [
       '#type' => 'date',
       '#title' => 'Fecha inicial',
       '#description' => 'Fecha final de validación de facturación',
+      '#default_value' => $config->get('resolutionValidUntil'),
     ];
 
     return parent::buildForm($form, $form_state);
