@@ -1,7 +1,7 @@
-facturacion_gt.settings_form:
-  path: '/admin/config/facturacion-gt/settings'
+facturacion_gt.invoice_settings:
+  path: '/admin/config/facturacion-gt/invoice-settings'
   defaults:
-    _form: '\Drupal\facturacion_gt\Form\FacturacionGtSettingsForm'
-    _title: 'Facturación GT Settings'
+    _form: '\Drupal\facturacion_gt\Form\FacturacionGtInvoiceSettingsForm'
+    _title: 'Facturación GT Invoice Settings'
   requirements:
     _permission: 'administer site configuration'

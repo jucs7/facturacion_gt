@@ -1,6 +1,7 @@
-facturacion_gt.settings:
-  title: 'Facturación GT Settings'
-  description: 'Configurar valores para facturación.'
+facturacion_gt.invoice_settings:
+  title: 'Datos de la facturación'
+  description: 'Ingrese los datos de la factura'
   parent: system.admin_config_system
-  route_name: facturacion_gt.settings_form
-  weight: 100
+  route_name: facturacion_gt.invoice_settings
+  weight: 10
+
