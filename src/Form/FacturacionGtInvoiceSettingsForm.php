@@ -61,7 +61,7 @@ class FacturacionGtInvoiceSettingsForm extends ConfigFormBase {
       '#type' => 'number',
       '#title' => 'Rango inicial',
       '#description' => 'Rango inicial de facturación',
-      '#default_value' => $config->get('consecutive') + 1,
+      '#default_value' => $config->get('consecutive'),
       '#min' => 0,
     ];
 
