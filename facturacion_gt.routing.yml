@@ -5,3 +5,11 @@ facturacion_gt.invoice_settings:
     _title: 'Facturación GT Invoice Settings'
   requirements:
     _permission: 'administer site configuration'
+
+facturacion_gt.webform_facturar:
+  path: '/facturacion-gt/facturar'
+  defaults:
+    _controller: '\Drupal\facturacion_gt\Controller\FacturacionGtController::renderFacturarTemplate'
+    _title: 'Formulario de facturación'
+  requirements:
+    _permission: 'access content'

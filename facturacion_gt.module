@@ -4,3 +4,17 @@
  * @file
  * Facturación GT module.
  */
+
+
+/**
+ * Implements hook_theme().
+ */
+function facturacion_gt_theme($existing, $type, $theme, $path) {
+  return[
+    'webform_facturar' => [
+      'variables' => ['webform' => NULL],
+      'template' => 'webform-facturar',
+      'path' => 'modules/custom/facturacion_gt/templates'
+    ],
+  ];
+}
