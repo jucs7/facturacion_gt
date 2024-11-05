@@ -29,7 +29,10 @@ class FacturaDataHandler {
       // Si es Persona Jurídica
       $factura['customer']['companyName'] = $values['razon_social'];
       $factura['customer']['personType'] = '1';
-      $factura['customer']['identification'] = $values['nit'];
+
+      // Obtener NIT y dígito de verificación
+      $factura['customer']['identification'] = substr($values['nit'], 0, -1);;
+      $factura['customer']['digitCheck'] = substr($values['nit'], -1);
       $factura['customer']['identificationTypeCode'] = '31';
       // Limpiar los campos de Persona Natural.
       $factura['customer']['firstName'] = "";

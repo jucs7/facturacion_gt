@@ -12,9 +12,10 @@ class ApiClient {
   protected $apiKey;
 
   public function __construct() {
+    $config = \Drupal::configFactory()->getEditable('facturacion_gt.invoice_settings');
     $this->client = new Client();
-    $this->apiUrl = 'https://isv.aliaddo.net/api/v1/public/documents/invoice/test';
-    $this->apiKey = 'key-3440faa4a3b2419aa1c3ac3b2a457b8d-031610';
+    $this->apiUrl = $config->get('endpoint');
+    $this->apiKey = $config->get('apiKey');
   }
 
   public function enviarFactura(array $facturaData) {

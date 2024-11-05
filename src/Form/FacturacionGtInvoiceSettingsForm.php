@@ -30,6 +30,26 @@ class FacturacionGtInvoiceSettingsForm extends ConfigFormBase {
 
     $config = $this->config('facturacion_gt.invoice_settings');
 
+    $form['entorno'] = [
+      '#type' => 'fieldset',
+      '#title' => 'Entorno',
+      '#description' => 'Entorno de operación',
+    ];
+
+    $form['entorno']['endpoint'] = [
+      '#type' => 'textfield',
+      '#title' => 'Endpoint',
+      '#description' => 'Endpoint de facturación',
+      '#default_value' => $config->get('endpoint'),
+    ];
+
+    $form['entorno']['apiKey'] = [
+      '#type' => 'textfield',
+      '#title' => 'Api Key',
+      '#description' => 'X Api Key de autenticación',
+      '#default_value' => $config->get('apiKey'),
+    ];
+
     $form['resolution'] = [
       '#type' => 'fieldset',
       '#title' => 'Resolución',
@@ -61,7 +81,7 @@ class FacturacionGtInvoiceSettingsForm extends ConfigFormBase {
       '#type' => 'number',
       '#title' => 'Rango inicial',
       '#description' => 'Rango inicial de facturación',
-      '#default_value' => $config->get('consecutive'),
+      '#default_value' => $config->get('resolutionRangeInitial'),
       '#min' => 0,
     ];
 
@@ -70,6 +90,14 @@ class FacturacionGtInvoiceSettingsForm extends ConfigFormBase {
       '#title' => 'Rango final',
       '#description' => 'Rango final de facturación',
       '#default_value' => $config->get('resolutionRangeFinal'),
+      '#min' => 0,
+    ];
+
+    $form['resolution']['consecutive'] = [
+      '#type' => 'number',
+      '#title' => 'Consecutivo',
+      '#description' => 'Consecutivo de la siguiente factura',
+      '#default_value' => $config->get('consecutive'),
       '#min' => 0,
     ];
 
@@ -82,7 +110,7 @@ class FacturacionGtInvoiceSettingsForm extends ConfigFormBase {
 
     $form['resolution']['resolutionValidUntil'] = [
       '#type' => 'date',
-      '#title' => 'Fecha inicial',
+      '#title' => 'Fecha final',
       '#description' => 'Fecha final de validación de facturación',
       '#default_value' => $config->get('resolutionValidUntil'),
     ];
@@ -95,12 +123,14 @@ class FacturacionGtInvoiceSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('facturacion_gt.invoice_settings')
+      ->set('endpoint', $form_state->getValue('endpoint'))
+      ->set('apiKey', $form_state->getValue('apiKey'))
       ->set('resolutionKey', $form_state->getValue('resolutionKey'))
       ->set('resolutionPrefix', $form_state->getValue('resolutionPrefix'))
       ->set('resolutionNumber', $form_state->getValue('resolutionNumber'))
       ->set('resolutionRangeInitial', $form_state->getValue('resolutionRangeInitial'))
       ->set('resolutionRangeFinal', $form_state->getValue('resolutionRangeFinal'))
-      ->set('consecutive', $form_state->getValue('resolutionRangeInitial'))
+      ->set('consecutive', $form_state->getValue('consecutive'))
       ->set('resolutionValidFrom', $form_state->getValue('resolutionValidFrom'))
       ->set('resolutionValidUntil', $form_state->getValue('resolutionValidUntil'))
       ->save();
