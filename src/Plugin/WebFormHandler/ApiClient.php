@@ -48,12 +48,24 @@ class ApiClient {
 
     // Verificar el estado de la respuesta
     if ($response->getStatusCode() == 200) {
-      \Drupal::logger('facturacion_gt')->info('La factura ha sido enviada correctamente. @response', ['@response' => json_encode($body)]);
-      return [
-        'success' => true,
-        'message' => 'La factura ha sido enviada correctamente.',
-        'data' => $body,
-      ];
+      // Factura enviada correctamente a la API
+      if ($body["dianState"] == 00) {
+        // Si no hubo códigos de rechazo de la DIAN
+        \Drupal::logger('facturacion_gt')->info('La factura ha sido enviada correctamente. @response', ['@response' => json_encode($body)]);
+        return [
+          'success' => true,
+          'message' => 'La factura ha sido enviada correctamente.',
+          'data' => $body,
+        ];
+      } else {
+        // Si hubo códigos de rechazo de la DIAN
+        \Drupal::logger('facturacion_gt')->error('Error al enviar la factura. @status', ['@response' => json_encode($body["dianStateReason"])]);
+        return [
+          'success' => false,
+          'message' => 'Error al enviar la factura.' . json_encode($body["dianStateReason"]),
+        ];
+      }
+
     } else {
       \Drupal::logger('facturacion_gt')->error('Error al enviar la factura. @status', ['@status' => $response->getStatusCode()]);
       return [
