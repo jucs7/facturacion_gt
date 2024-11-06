@@ -79,7 +79,7 @@ elements: |-
         ':input[name="persona_natural"]':
           checked: true
   nit:
-    '#type': number
+    '#type': textfield
     '#title': NIT
     '#title_display': invisible
     '#placeholder': NIT
