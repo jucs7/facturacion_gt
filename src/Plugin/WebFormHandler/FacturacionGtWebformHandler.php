@@ -6,6 +6,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\WebformSubmissionInterface;
 use Drupal\facturacion_gt\Plugin\WebformHandler\FacturaDataHandler;
+use Drupal\facturacion_gt\Plugin\WebformHandler\FacturaNodeHandler;
 
 /**
  * Webform submission handler for Facturacion GT.
@@ -65,6 +66,11 @@ class FacturacionGtWebformHandler extends WebformHandlerBase {
     if ($response['success']) {
       // Incrementar el consecutivo en la configuración solo si el envío es exitoso.
       $config->set('consecutive', $factura_data['consecutive'] + 1)->save();
+
+      // Crear contenido de tipo factura
+      $nodeHandler = new FacturaNodeHandler($response['data']);
+      $nodeHandler->createNode();
+
       \Drupal::messenger()->addMessage($response['message']);
     } else {
       \Drupal::messenger()->addError($response['message']);
