@@ -11,7 +11,6 @@ class FacturaNodeHandler {
   protected $customer;
   protected $detail;
   protected $urlPdf;
-
   
   public function __construct(array $factura) {
     $this->factura = $factura;
@@ -22,51 +21,36 @@ class FacturaNodeHandler {
   }
 
   public function invoiceDataHandler(array $invoiceData) {
-    $totalsAmount = $invoiceData['totals']['amount'];
-    $sequence = $invoiceData['sequence'];
-    $date = $invoiceData['date'];
-    $dateDue = $invoiceData['dateDue'];
-    $cufe = $invoiceData['cufe'];
-
-    return "Total: $totalsAmount\n" .
-      "Consecutivo: $sequence\n" . 
-      "Fecha: $date\n" . 
-      "Fecha de vencimiento: $dateDue\n" .
-      "Cufe: $cufe";
+    return "Total: {$invoiceData['totals']['amount']}\n" .
+      "Consecutivo: {$invoiceData['sequence']}\n" . 
+      "Fecha: {$invoiceData['date']}\n" . 
+      "Fecha de vencimiento: {$invoiceData['dateDue']}\n" .
+      "Cufe: {$invoiceData['cufe']}";
   }
 
   public function customerDataHandler(array $customerData) {
-    $companyName = $customerData['companyName'];
     $identification = $customerData['identification'];
-    $email = $customerData['email'];
-    $phone = $customerData['phone'];
 
     if ($customerData['personType'] == 1) {
-      // Si es persona jurídica
+      // Si es persona jurídica agrega el dígito de verificación
       $identification .= "-" . $customerData['digitCheck'];
     }
     
-    return "Nombre: $companyName\n" .
+    return "Nombre: {$customerData['companyName']}\n" .
       "Identificación: $identification\n" .
-      "Email: $email\n" .
-      "Teléfono: $phone";
+      "Email: {$customerData['email']}\n" .
+      "Teléfono: {$customerData['phone']}";
   }
 
   public function detailDataHandler(array $detailData) {
     $invoiceDetails = "";
 
     foreach ($detailData as $item) {
-      $itemCode = $item['itemCode'];
-      $itemName = $item['itemName'];
-      $price = $item['price'];
-      $quantity = $item['quantity'];
-      $subTotal = $item['subTotal'];
-
-      $invoiceDetails .= "Código de ítem: $itemCode\n" .
-        "Nombre de ítem: $itemName\n" .
-        "Precio: $price\n" .
-        "Cantidad: $quantity\n" .
-        "Subtotal: $subTotal\n\n";
+      $invoiceDetails .= "Código de ítem: {$item['itemCode']}\n" .
+        "Nombre de ítem: {$item['itemName']}\n" .
+        "Precio: {$item['price']}\n" .
+        "Cantidad: {$item['quantity']}\n" .
+        "Subtotal: {$item['subTotal']}\n\n";
     }
     
     return $invoiceDetails;
@@ -92,6 +76,10 @@ class FacturaNodeHandler {
       ],
       'field_detalle' => [
         'value' => $this->detail,
+        'format' => 'plain_text',
+      ],
+      'field_factura_json' => [
+        'value' => json_encode($this->factura),
         'format' => 'plain_text',
       ],
     ]);
