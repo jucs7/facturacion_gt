@@ -9,11 +9,7 @@ class FacturaDataHandler {
     $amount = 0;
 
     // Fecha
-    $date = date('Y-m-d');
-    $factura['date'] = $date;
-    $factura['dateDue'] = $date;
-    $factura['dateStart'] = $date;
-    $factura['dateEnd'] = $date;
+    $factura['date'] = date('Y-m-d\TH:i:s');
 
     // Ingresar valores en la factura
     if (!empty($values['persona_natural'])) {
