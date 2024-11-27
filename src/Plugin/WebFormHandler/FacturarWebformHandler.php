@@ -12,15 +12,15 @@ use Drupal\facturacion_gt\Plugin\WebformHandler\FacturaNodeHandler;
  * Webform submission handler for Facturacion GT.
  *
  * @WebformHandler(
- *   id = "facturacion_gt_webform_handler",
- *   label = @Translation("Facturación GT Webform Handler"),
- *   category = @Translation("Custom"),
- *   description = @Translation("Updates the factura.json file based on Webform submissions."),
+ *   id = "facturar_webform_handler",
+ *   label = "Facturar Webform Handler",
+ *   category = "Custom",
+ *   description = "Envía facturas a la API de Aliaddo.",
  *   cardinality = \Drupal\webform\Plugin\WebformHandlerInterface::CARDINALITY_SINGLE,
  *   submission = \Drupal\webform\Plugin\WebformHandlerInterface::SUBMISSION_REQUIRED,
  * )
  */
-class FacturacionGtWebformHandler extends WebformHandlerBase {
+class FacturarWebformHandler extends WebformHandlerBase {
 
   /**
    * {@inheritdoc}
