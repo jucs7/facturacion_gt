@@ -4,6 +4,8 @@ status: open
 dependencies:
   module:
     - facturacion_gt
+_core:
+  default_config_hash: A_arIgBdxAXdZ7WK8ufbXthRLf-xRFFknlGpFn2mqAw
 weight: 0
 open: null
 close: null
@@ -136,6 +138,10 @@ elements: |-
           '#required': true
           '#title': Cantidad
           '#placeholder': Cantidad
+  actions:
+    '#type': webform_actions
+    '#title': 'Submit button(s)'
+    '#submit__label': Facturar
 css: ''
 javascript: ''
 settings:
@@ -153,7 +159,7 @@ settings:
   form_open_message: ''
   form_close_message: ''
   form_exception_message: ''
-  form_previous_submissions: true
+  form_previous_submissions: false
   form_confidential: false
   form_confidential_message: ''
   form_disable_remote_addr: false
@@ -240,7 +246,7 @@ settings:
   draft_loaded_message: ''
   draft_pending_single_message: ''
   draft_pending_multiple_message: ''
-  confirmation_type: page
+  confirmation_type: none
   confirmation_url: ''
   confirmation_title: ''
   confirmation_message: ''
@@ -320,10 +326,10 @@ access:
     users: {  }
     permissions: {  }
 handlers:
-  facturacion_gt_webform_handler:
-    id: facturacion_gt_webform_handler
-    handler_id: facturacion_gt_webform_handler
-    label: 'Facturación GT Webform Handler'
+  facturar_webform_handler:
+    id: facturar_webform_handler
+    handler_id: facturar_webform_handler
+    label: 'Facturar Webform Handler'
     notes: ''
     status: true
     conditions: {  }
