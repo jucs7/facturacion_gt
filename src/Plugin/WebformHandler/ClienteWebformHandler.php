@@ -70,7 +70,7 @@ class ClienteWebformHandler extends WebformHandlerBase {
     // Guardar el usuario.
     try {
       $user->save();
-      \Drupal::messenger()->addMessage(t('Cliente registrado exitosamente.'));
+      \Drupal::messenger()->addMessage('Cliente registrado exitosamente.');
     }
     catch (\Exception $e) {
       \Drupal::logger('facturacion_gt')->error($e->getMessage());

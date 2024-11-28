@@ -11,32 +11,37 @@ class FacturaDataHandler {
     // Fecha
     $factura['date'] = date('Y-m-d\TH:i:s');
 
-    // Ingresar valores en la factura
-    if (!empty($values['persona_natural'])) {
-      // Si es Persona Natural
-      $factura['customer']['companyName'] = $values['nombres'] . ' ' . $values['apellidos'];
-      $factura['customer']['personType'] = '2';
-      $factura['customer']['firstName'] = $values['nombres'];
-      $factura['customer']['lastName'] = $values['apellidos'];
-      $factura['customer']['identification'] = $values['identificacion'];
-      $factura['customer']['identificationTypeCode'] = '13';
-    }
-    elseif (!empty($values['persona_juridica'])) {
-      // Si es Persona Jurídica
-      $factura['customer']['companyName'] = $values['razon_social'];
-      $factura['customer']['personType'] = '1';
+    // Cargar datos del cliente
+    $customer = \Drupal\user\Entity\User::load($values['cliente']);
 
-      // Obtener NIT y dígito de verificación
-      $factura['customer']['identification'] = substr($values['nit'], 0, -1);;
-      $factura['customer']['digitCheck'] = substr($values['nit'], -1);
-      $factura['customer']['identificationTypeCode'] = '31';
+    // Obtener tipo de persona
+    $tipo_de_persona = $customer->get('field_tipo_de_persona')->value;
+
+    // Ingresar valores en la factura
+    if ($tipo_de_persona == '2') {
+      // Si es Persona Natural
+      $factura['customer']['companyName'] = $customer->get('field_nombre_completo')->value;
+      $factura['customer']['personType'] = $tipo_de_persona;
+      $factura['customer']['firstName'] = $customer->get('field_nombres')->value;
+      $factura['customer']['lastName'] = $customer->get('field_apellidos')->value;
+      $factura['customer']['identification'] = $customer->get('field_identificacion')->value;
+    }
+    elseif ($tipo_de_persona == '1') {
+      // Si es Persona Jurídica
+      $factura['customer']['companyName'] = $customer->get('field_nombre_completo')->value;
+      $factura['customer']['personType'] = $tipo_de_persona;
+      $factura['customer']['identification'] = $customer->get('field_identificacion')->value;
+      $factura['customer']['digitCheck'] = $customer->get('field_digito_de_verificacion')->value;
       // Limpiar los campos de Persona Natural.
       $factura['customer']['firstName'] = "";
       $factura['customer']['lastName'] = "";
     }
-
-    $factura['customer']['email'] = $values['email'];
-    $factura['customer']['phone'] = $values['telefono'];
+    
+    $factura['customer']['identificationTypeCode'] = $customer->get('field_tipo_de_identificacion')->value;
+    $factura['customer']['email'] = $customer->get('field_email')->value;
+    $factura['customer']['phone'] = $customer->get('field_telefono')->value;
+    $factura['customer']['responsibilities'] = $customer->get('field_responsabilidades_fiscales')->value;
+    $factura['customer']['regimeType'] = $customer->get('field_tipo_de_regimen')->value;
 
     // Obtener productos
     $productos = $values['productos_composite'];
