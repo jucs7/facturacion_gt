@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\facturacion_gt\Plugin\WebformHandler;
+namespace Drupal\facturacion_gt\Handler;
 
 use Drupal\node\Entity\Node;
 

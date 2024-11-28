@@ -1,63 +1,45 @@
 {
     "code": "01",
     "format": "Estandar",
-    "emailSender": "",
-    "consecutive": "990004322",
+    "emailSender": "jucs0709@gmail.com",
+    "consecutive": "59",
     "externalNumber": "",
     "currencyCode": "COP",
     "currencyRate": 0,
-    "date": "2020-1-23",
-    "dateDue": "2020-1-29",
-    "dateStart": "2020-1-23",
-    "dateEnd": "2020-1-29",
+    "date": "2024-11-28T01:14:39",
     "typeOfOperation": "10",
-    "incoterms": "",
-    "deliveryTerms": "",
-    "terms": "",
-    "remark": "",
-    "observation": "",
-    "termDay": 0,
-    "paymentMeanCode": "48",
-    "branch": {
-        "name": "",
-        "address": "",
-        "phone": "",
-        "countryCode": "",
-        "countryName": "",
-        "departamentCode": "",
-        "departamentName": "",
-        "cityCode": "",
-        "cityName": ""
-    },
+    "paymentMeanCode": "42",
     "resolution": {
         "resolutionKey": "fc8eac422eba16e22ffd8c6f94b3f40a6e38162c",
         "resolutionPrefix": "SETT",
         "resolutionNumber": "18760000001",
-        "resolutionRangeInitial": "990000000",
-        "resolutionRangeFinal": "995000000",
+        "resolutionRangeInitial": "1",
+        "resolutionRangeFinal": "5000000",
         "resolutionValidFrom": "2019-01-19",
         "resolutionValidUntil": "2030-01-19"
     },
     "customer": {
-        "companyName": "Empresa",
-        "personType": "1",
-        "regimeType": "48",
-        "identification": "987654321",
-        "digitCheck": "8",
-        "identificationTypeCode": "31",
-        "email": "email@email.com",
-        "phone": "",
+        "companyName": "Juan Correa",
+        "personType": "2",
+        "regimeType": "49",
+        "firstName": "Juan",
+        "lastName": "Correa",
+        "identification": "123456789",
+        "digitCheck": "2",
+        "identificationTypeCode": "13",
+        "email": "jucs0709@gmail.com",
+        "phone": "1231231231",
         "merchantRegistration": "",
         "responsibleFor": "ZZ",
         "responsibilities": "R-99-PN",
-        "economicActivities": "2824;2920",
-        "billingAddress": "KR con Calle",
+        "economicActivities": "",
+        "billingAddress": "",
         "billingCountryName": "Colombia",
         "billingCountryCode": "CO",
-        "billingRegionName": "Cundinamarca",
-        "billingRegionCode": "25",
-        "billingCityName": "Chipaque",
-        "billingCityCode": "25178",
+        "billingRegionName": "Bogota",
+        "billingRegionCode": "11",
+        "billingCityName": "Bogota, D.c.",
+        "billingCityCode": "11001",
         "billingPostalCode": "",
         "billingNeighborhood": "",
         "billingPhone": "",
@@ -72,91 +54,31 @@
         "shippingPostalCode": "",
         "shippingNeighborhood": "",
         "shippingPhone": "",
-        "shippingContactName": "",
-        "firstName": "",
-        "lastName": ""
+        "shippingContactName": ""
     },
     "invoiceDetails": [
         {
             "standardType": "",
             "standardCode": "",
-            "itemCode": "0001",
+            "itemCode": "1",
             "itemName": "Item",
             "itemModel": "",
-            "description": "Item prueba",
+            "description": "",
             "brandName": "",
             "itemCodeSupplier": "",
             "isPresent": false,
             "unitMeasurementCode": "",
-            "unitMeasurementName": "",
-            "price": "1285.00",
-            "quantity": "2",
-            "discounts": [
-                {
-                    "name": "",
-                    "type": "V",
-                    "rate": 1,
-                    "amount": 1
-                }
-            ],
-            "charges": [
-                {
-                    "name": "",
-                    "type": "V",
-                    "rate": 10,
-                    "amount": 10
-                }
-            ],
-            "taxes": [
-                {
-                    "name": "Iva",
-                    "code": "01",
-                    "type": "F",
-                    "rate": 10,
-                    "amount": 10
-                }
-            ],
-            "withholdings": [
-                {
-                    "name": "ReteFuente",
-                    "code": "06",
-                    "type": "P",
-                    "rate": 10,
-                    "amount": 3.4
-                }
-            ],
-            "isvMandante": {
-                "name": "Mandante",
-                "identification": "000001",
-                "digitCheck": "8",
-                "identificationTypeCode": "13"
-            }
+            "price": "30000",
+            "quantity": "3",
+            "discounts": [],
+            "charges": [],
+            "taxes": [],
+            "withholdings": [],
+            "isvMandante": []
         }
     ],
     "totals": {
-        "prepaymentAmount": 68,
-        "amount": 0
-    },
-    "discounts": [
-        {
-            "name": "",
-            "type": "",
-            "rate": 0,
-            "amount": 0
-        }
-    ],
-    "charges": [
-        {
-            "name": "",
-            "type": "",
-            "rate": 0,
-            "amount": 0
-        }
-    ],
-    "customFields": [
-        {
-            "value": "666",
-            "key": "invoiceId"
-        }
-    ]
+        "prepaymentAmount": 0,
+        "amount": 90000
+    }
 }

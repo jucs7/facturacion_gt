@@ -1,0 +1,4 @@
+services:
+  facturacion_gt.api_client:
+    class: Drupal\facturacion_gt\Service\ApiClient
+    arguments: ['@http_client']

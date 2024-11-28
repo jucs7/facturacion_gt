@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\facturacion_gt\Plugin\WebformHandler;
+namespace Drupal\facturacion_gt\Service;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
