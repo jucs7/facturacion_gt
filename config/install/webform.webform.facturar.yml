@@ -17,127 +17,68 @@ title: Facturar
 description: ''
 categories: {  }
 elements: |-
+  registrar_cliente:
+    '#type': webform_markup
+    '#markup': '<p><a class="button button--primary" href="/form/registrar-cliente">Registrar cliente</a></p>'
   cliente:
-    '#type': label
+    '#type': webform_entity_select
     '#title': Cliente
-  persona_natural:
-    '#type': checkbox
-    '#title': 'Persona natural'
-    '#states':
-      required:
-        ':input[name="persona_juridica"]':
-          unchecked: true
-      unchecked:
-        ':input[name="persona_juridica"]':
-          checked: true
-  persona_juridica:
-    '#type': checkbox
-    '#title': 'Persona jurídica'
-    '#states':
-      required:
-        ':input[name="persona_natural"]':
-          unchecked: true
-      unchecked:
-        ':input[name="persona_natural"]':
-          checked: true
-  nombres:
-    '#type': textfield
-    '#title': Nombres
-    '#title_display': invisible
-    '#placeholder': Nombres
+    '#select2': true
     '#required': true
-    '#states':
-      visible:
-        ':input[name="persona_natural"]':
-          checked: true
-  apellidos:
+    '#target_type': user
+    '#selection_handler': 'default:user'
+    '#selection_settings':
+      include_anonymous: true
+      filter:
+        type: role
+        role:
+          cliente: cliente
+          content_editor: 0
+          administrator: 0
+          comercio_facturacion: 0
+      sort:
+        field: created
+        direction: ASC
+  tipo_de_persona:
     '#type': textfield
-    '#title': Apellidos
-    '#title_display': invisible
-    '#placeholder': Apellidos
-    '#required': true
-    '#states':
-      visible:
-        ':input[name="persona_natural"]':
-          checked: true
-  razon_social:
-    '#type': textfield
-    '#title': 'Razón social'
-    '#title_display': invisible
-    '#placeholder': 'Razón social'
-    '#required': true
-    '#states':
-      visible:
-        ':input[name="persona_juridica"]':
-          checked: true
+    '#title': 'Tipo de persona'
+    '#title_display': none
+    '#placeholder': 'Tipo de persona'
+    '#readonly': true
   identificacion:
-    '#type': number
-    '#title': Identificación
-    '#title_display': invisible
-    '#placeholder': Identificación
-    '#required': true
-    '#states':
-      visible:
-        ':input[name="persona_natural"]':
-          checked: true
-  nit:
     '#type': textfield
-    '#title': NIT
-    '#title_display': invisible
-    '#placeholder': NIT
-    '#required': true
-    '#states':
-      visible:
-        ':input[name="persona_juridica"]':
-          checked: true
-  email:
-    '#type': email
-    '#title': Email
-    '#title_display': invisible
-    '#placeholder': Email
-    '#required': true
-  telefono:
-    '#type': tel
-    '#title': Teléfono
-    '#title_display': invisible
-    '#placeholder': Teléfono
-    '#required': true
-  productos_fieldset:
-    '#type': fieldset
+    '#title': Identificacion
+    '#title_display': none
+    '#placeholder': Identificacion
+    '#readonly': true
+  nombre_o_razon_social:
+    '#type': textfield
+    '#title': 'Nombre o razon social'
+    '#title_display': none
+    '#placeholder': 'Nombre / Razon social'
+    '#autocomplete': ''
+    '#readonly': true
+  detalle_productos:
+    '#type': label
+    '#title': 'Detalle productos'
+  productos_composite:
+    '#type': webform_custom_composite
     '#title': Productos
-    productos_composite:
-      '#type': webform_custom_composite
-      '#title': Productos
-      '#required': true
-      '#multiple__min_items': 1
-      '#multiple__empty_items': 0
-      '#multiple__sorting': false
-      '#multiple__add': false
-      '#multiple__add_more_input': false
-      '#multiple__add_more_button_label': 'Agregar producto'
-      '#wrapper_type': container
-      '#format_items': hr
-      '#element':
-        codigo_item:
-          '#type': number
-          '#required': true
-          '#title': Código
-          '#placeholder': Código
-        nombre_item:
-          '#type': textfield
-          '#required': true
-          '#title': 'Nombre item'
-          '#placeholder': 'Nombre item'
-        precio_item:
-          '#type': number
-          '#required': true
-          '#title': Precio
-          '#placeholder': Precio
-        cantidad_item:
-          '#type': number
-          '#required': true
-          '#title': Cantidad
-          '#placeholder': Cantidad
+    '#required': true
+    '#multiple__min_items': 1
+    '#multiple__empty_items': 0
+    '#multiple__sorting': false
+    '#multiple__add': false
+    '#multiple__add_more_input': false
+    '#multiple__add_more_button_label': 'Agregar producto'
+    '#wrapper_type': container
+    '#format_items': hr
+    '#element':
+      codigo_item:
+        '#type': textfield
+        '#title': Codigo
+        '#placeholder': Codigo
+    '#select2': true
   actions:
     '#type': webform_actions
     '#title': 'Submit button(s)'
@@ -145,7 +86,7 @@ elements: |-
 css: ''
 javascript: ''
 settings:
-  ajax: false
+  ajax: true
   ajax_scroll_top: form
   ajax_progress_type: ''
   ajax_effect: ''

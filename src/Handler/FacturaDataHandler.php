@@ -2,6 +2,9 @@
 
 namespace Drupal\facturacion_gt\Handler;
 
+use Drupal\user\Entity\User;
+use Drupal\node\Entity\Node;
+
 class FacturaDataHandler {
 
   public function prepareFacturaData(array $values, array $factura) {
@@ -12,7 +15,7 @@ class FacturaDataHandler {
     $factura['date'] = date('Y-m-d\TH:i:s');
 
     // Cargar datos del cliente
-    $customer = \Drupal\user\Entity\User::load($values['cliente']);
+    $customer = User::load($values['cliente']);
 
     // Obtener tipo de persona
     $tipo_de_persona = $customer->get('field_tipo_de_persona')->value;
@@ -50,13 +53,16 @@ class FacturaDataHandler {
     
     // Ingresar valores de productos
     for ($i = 0; $i < count($productos); $i++) {
-      $invoice_details[$i]['itemCode'] = $productos[$i]['codigo_item'];
-      $invoice_details[$i]['itemName'] = $productos[$i]['nombre_item'];
-      $invoice_details[$i]['price'] = $productos[$i]['precio_item'];
-      $invoice_details[$i]['quantity'] = $productos[$i]['cantidad_item'];
+      // Cargar datos del producto
+      $item = Node::load($productos[$i]['producto']);
+
+      $invoice_details[$i]['itemCode'] = $item->get('field_codigo')->value;
+      $invoice_details[$i]['itemName'] = $item->get('field_nombre')->value;
+      $invoice_details[$i]['price'] = $item->get('field_precio')->value;
+      $invoice_details[$i]['quantity'] = $productos[$i]['cantidad'];
 
       // Sumar al total
-      $amount += floatval($productos[$i]['precio_item']) * floatval($productos[$i]['cantidad_item']);
+      $amount += floatval($item->get('field_precio')->value) * floatval($productos[$i]['cantidad']);
 
       // Verificar si hay más productos y agregarlo
       if ($i != count($productos) - 1) {
