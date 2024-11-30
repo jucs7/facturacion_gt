@@ -28,8 +28,10 @@ class ClienteWebformHandler extends WebformHandlerBase {
     // Verificar si ya existe un cliente con la misma identificacion.
     $existing_user = user_load_by_name($data['identificacion']);
     if ($existing_user) {
-      \Drupal::messenger()->addMessage('El cliente ya esta registrado.', 'error');
-      return;
+      if ($existing_user->hasRole('cliente')) {
+        \Drupal::messenger()->addMessage('El cliente ya esta registrado.', 'error');
+        return;
+      }
     }
 
     // Crear el nuevo cliente.

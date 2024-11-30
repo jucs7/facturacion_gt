@@ -28,6 +28,7 @@ function facturacion_gt_theme($existing, $type, $theme, $path) {
 function facturacion_gt_form_alter(&$form, FormStateInterface $form_state, $form_id) {
 
   facturar_custom_composite($form, $form_state, $form_id);
+  facturar_ajax()
 
 }
 
@@ -93,4 +94,8 @@ function facturar_custom_composite(&$form, FormStateInterface $form_state, $form
       $form['elements']['productos_composite']['#element'] = $fields;
     }
   }
+}
+
+function facturar_ajax() {
+
 }
