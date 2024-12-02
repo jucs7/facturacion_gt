@@ -13,3 +13,12 @@ facturacion_gt.webform_facturar:
     _title: 'Formulario de facturación'
   requirements:
     _permission: 'access content'
+
+facturacion_gt.facturar_user_data:
+  path: '/facturacion-gt/user-data/{uid}'
+  defaults:
+    _controller: '\Drupal\facturacion_gt\Controller\UserDataController::getUserData'
+    _title: 'Get User Data'
+  requirements:
+    _permission: 'access content'
+    uid: '\d+'

@@ -1,0 +1,7 @@
+facturar_webform_autofill:
+  js:
+    js/facturar_webform_autofill.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupal.ajax

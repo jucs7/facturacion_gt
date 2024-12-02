@@ -28,7 +28,7 @@ function facturacion_gt_theme($existing, $type, $theme, $path) {
 function facturacion_gt_form_alter(&$form, FormStateInterface $form_state, $form_id) {
 
   facturar_custom_composite($form, $form_state, $form_id);
-  facturar_ajax()
+  facturar_ajax($form, $form_state, $form_id);
 
 }
 
@@ -46,17 +46,18 @@ function facturar_custom_composite(&$form, FormStateInterface $form_state, $form
 
       // Campos personalizados
       $fields['producto'] = [
-        '#type' => 'webform_entity_select',
+        '#type' => 'entity_autocomplete',
         '#required' => true,
         '#weight' => 1,
         '#title' => 'Producto',
         '#placeholder' => 'Producto',
-        '#select2' => true,
+        // '#select2' => true,
         '#target_type' => 'node',
         '#selection_handler' => 'default:node',
         '#selection_settings' => [
           'target_bundles' => [
-            'producto' => 'producto'
+            'producto' => 'producto',
+            'servicios' => 'servicios'
           ],
           'sort' => [
             'field' => 'title',
@@ -96,6 +97,10 @@ function facturar_custom_composite(&$form, FormStateInterface $form_state, $form
   }
 }
 
-function facturar_ajax() {
+function facturar_ajax(&$form, FormStateInterface $form_state, $form_id) {
+  // Autocompletar campos con ajax
+  if ($form_id === 'webform_submission_facturar_add_form') {
+      $form['#attached']['library'][] = 'facturacion_gt/facturar_webform_autofill';
+    }
 
 }
