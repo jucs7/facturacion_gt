@@ -35,9 +35,70 @@ function facturacion_gt_form_alter(&$form, FormStateInterface $form_state, $form
 /**
  * Funciones auxiliares del hook_form_alter().
  */
+// Implementar campos para custom composite para productos en formularios de facturacion
 function facturar_custom_composite(&$form, FormStateInterface $form_state, $form_id) {
-  // Implementar campos para custom composite para productos en formulario de facturacion
+  // Formulario de factura electronica
   if ($form_id === 'webform_submission_facturar_add_form') {
+    if (isset($form['elements']['productos_composite'])) {
+      // Ocultar primer campo
+      $fields['codigo_item'] = [
+        '#display' => 'none'
+      ];
+
+      // Campos personalizados
+      $fields['producto'] = [
+        '#type' => 'entity_autocomplete',
+        '#required' => true,
+        '#weight' => 1,
+        '#title' => 'Producto',
+        '#placeholder' => 'Producto',
+        // '#select2' => true,
+        '#target_type' => 'node',
+        '#selection_handler' => 'default:node',
+        '#selection_settings' => [
+          'target_bundles' => [
+            'producto' => 'producto',
+            'servicios' => 'servicios'
+          ],
+          'sort' => [
+            'field' => 'title',
+            'direction' => 'ASC'
+          ]
+        ]
+      ];
+      
+      $fields['precio'] = [
+        '#type' => 'number',
+        '#required' => false,
+        '#weight' => 2,
+        '#title' => 'Precio',
+        '#placeholder' => 'Precio',
+        '#readonly' => true
+      ];
+
+      $fields['cantidad'] = [
+        '#type' => 'number',
+        '#required' => true,
+        '#weight' => 3,
+        '#title' => 'Cantidad',
+        '#placeholder' => 'Cantidad'
+      ];
+      
+      $fields['subtotal'] = [
+        '#type' => 'number',
+        '#required' => false,
+        '#weight' => 4,
+        '#title' => 'Subtotal',
+        '#placeholder' => 'Subtotal',
+        '#readonly' => true
+      ];
+
+      $form['elements']['productos_composite']['#element'] = $fields;
+    }
+  }
+
+  // Formulario de factura no electronica
+  if ($form_id === 'webform_submission_facturar_no_electronica_add_form') {
     if (isset($form['elements']['productos_composite'])) {
       // Ocultar primer campo
       $fields['codigo_item'] = [
@@ -97,10 +158,15 @@ function facturar_custom_composite(&$form, FormStateInterface $form_state, $form
   }
 }
 
+// Autocompletar campos con ajax
 function facturar_ajax(&$form, FormStateInterface $form_state, $form_id) {
-  // Autocompletar campos con ajax
+  // Formulario de factura electronica
   if ($form_id === 'webform_submission_facturar_add_form') {
-      $form['#attached']['library'][] = 'facturacion_gt/facturar_webform_autofill';
-    }
+    $form['#attached']['library'][] = 'facturacion_gt/facturar_webform_autofill';
+  }
 
+  // Formulario de factura no electronica
+  if ($form_id === 'webform_submission_facturar_no_electronica_add_form') {
+    $form['#attached']['library'][] = 'facturacion_gt/facturar_webform_autofill';
+  }
 }
