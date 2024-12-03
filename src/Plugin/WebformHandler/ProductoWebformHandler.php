@@ -26,6 +26,8 @@ class ProductoWebformHandler extends WebformHandlerBase {
   public function submitForm(array &$form, FormStateInterface $form_state, \Drupal\webform\WebformSubmissionInterface $webform_submission) {
     $data = $webform_submission->getData();
 
+    $categoria = $data['categoria'];
+    $proveedor = $data['proveedor'];
     $nombre = $data['nombre'];
     $codigo = $data['codigo'];
     $cantidad_de_stock = $data['cantidad_de_stock'];
@@ -46,9 +48,25 @@ class ProductoWebformHandler extends WebformHandlerBase {
       'type' => 'producto',
       'title' => $nombre,
       'field_codigo' => $codigo,
+      'field_categoria' => $categoria,
+      'field_proveedor' => $proveedor,
       'field_nombre' => $nombre,
       'field_stock' => $cantidad_de_stock,
       'field_precio' => $precio,
+      'status' => 1,
+    ]);
+
+    $node->save();
+
+    // Relacionar con el proveedor
+    $producto = \Drupal::entityTypeManager()
+      ->getStorage('node')
+      ->loadByProperties(['type' => 'producto', 'field_codigo' => $codigo]);
+    $node = Node::create([
+      'type' => 'producto_proveedor',
+      'title' => $nombre,
+      'field_producto' => $producto,
+      'field_proveedor' => $proveedor,
       'status' => 1,
     ]);
 
