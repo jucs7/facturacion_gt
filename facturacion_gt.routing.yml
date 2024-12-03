@@ -22,3 +22,12 @@ facturacion_gt.facturar_user_data:
   requirements:
     _permission: 'access content'
     uid: '\d+'
+
+facturacion_gt.facturar_product_data:
+  path: '/facturacion-gt/product-data/{pid}'
+  defaults:
+    _controller: '\Drupal\facturacion_gt\Controller\ProductDataController::getProductData'
+    _title: 'Get Product Data'
+  requirements:
+    _permission: 'access content'
+    pid: '\d+'
