@@ -8,12 +8,11 @@ use Drupal\user\Entity\User;
 
 class UserDataController extends ControllerBase {
   public function getUserData($uid) {
-    $user = user_load_by_name($uid);
-    $user_id = $user;
-    if ($user_id) {
+    $user = User::load($uid);
+    if ($user) {
       return new JsonResponse([
         'field_nombre_completo' => $user->get('field_nombre_completo')->value,
-        'field_identificacion' => $user->get('field_identificacion')->value,
+        'field_identificacion' => $user->get('name')->value,
         'field_tipo_de_persona' => $user->get('field_tipo_de_persona')->value,
       ]);
     }
