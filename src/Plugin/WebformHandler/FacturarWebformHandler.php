@@ -40,42 +40,52 @@ class FacturarWebformHandler extends WebformHandlerBase {
       return;
     }
 
-    // Leer el contenido actual del archivo JSON.
-    $factura_data = json_decode(file_get_contents($json_file), TRUE);
-
     // Obtener los valores enviados en el Webform.
     $values = $webform_submission->getData();
 
-    // Utilizar FacturaDataHandler para ingresar valores en la factura.
-    $facturaHandler = new FacturaDataHandler();
-    $factura_data = $facturaHandler->prepareFacturaData($values, $factura_data);
-
-    // Guardar los nuevos datos en el archivo JSON.
-    file_put_contents($json_file, json_encode($factura_data, JSON_PRETTY_PRINT));
-    
-    // Verificar si el consecutivo está dentro del rango.
-    if ($factura_data['consecutive'] > $factura_data['resolution']['resolutionRangeFinal'] && $factura_data['consecutive'] < $factura_data['resolution']['resolutionRangeInitial']) {
-      \Drupal::messenger()->addError('El rango de facturación ha sido alcanzado.');
-      return;
+    // Generar factura no electronica
+    if ($values['tipo_facturacion'] == 'Factura no electronica') {
+      // Crear contenido de tipo factura no electronica
+      $nodeHandler = new FacturaNodeHandler($values);
+      $nodeHandler->createFacturaNoElecNode();
+    }
+    // Factura electronica
+    else {
+      // Leer el contenido actual del archivo JSON.
+      $factura_data = json_decode(file_get_contents($json_file), TRUE);
+  
+      // Utilizar FacturaDataHandler para ingresar valores en la factura.
+      $facturaHandler = new FacturaDataHandler();
+      $factura_data = $facturaHandler->prepareFacturaData($values, $factura_data);
+  
+      // Guardar los nuevos datos en el archivo JSON.
+      file_put_contents($json_file, json_encode($factura_data, JSON_PRETTY_PRINT));
+      
+      // Verificar si el consecutivo está dentro del rango.
+      if ($factura_data['consecutive'] > $factura_data['resolution']['resolutionRangeFinal'] && $factura_data['consecutive'] < $factura_data['resolution']['resolutionRangeInitial']) {
+        \Drupal::messenger()->addError('El rango de facturación ha sido alcanzado.');
+        return;
+      }
+  
+      // Enviar los datos actualizados a la API.
+      $apiClient = new ApiClient();
+      $response = $apiClient->enviarFactura($factura_data);
+  
+      // Manejar la respuesta de la API
+      if ($response['success']) {
+        // Incrementar el consecutivo en la configuración solo si el envío es exitoso.
+        $config->set('consecutive', $factura_data['consecutive'] + 1)->save();
+  
+        // Crear contenido de tipo factura electronica
+        $nodeHandler = new FacturaNodeHandler($response['data']);
+        $nodeHandler->createFacturaNode();
+  
+        \Drupal::messenger()->addMessage($response['message']);
+      } else {
+        \Drupal::messenger()->addError($response['message']);
+      }
     }
 
-    // Enviar los datos actualizados a la API.
-    $apiClient = new ApiClient();
-    $response = $apiClient->enviarFactura($factura_data);
-
-    // Manejar la respuesta de la API
-    if ($response['success']) {
-      // Incrementar el consecutivo en la configuración solo si el envío es exitoso.
-      $config->set('consecutive', $factura_data['consecutive'] + 1)->save();
-
-      // Crear contenido de tipo factura
-      $nodeHandler = new FacturaNodeHandler($response['data']);
-      $nodeHandler->createNode();
-
-      \Drupal::messenger()->addMessage($response['message']);
-    } else {
-      \Drupal::messenger()->addError($response['message']);
-    }
   }
 
 }
