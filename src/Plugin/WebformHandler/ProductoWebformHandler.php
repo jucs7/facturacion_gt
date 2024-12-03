@@ -31,6 +31,7 @@ class ProductoWebformHandler extends WebformHandlerBase {
     $nombre = $data['nombre'];
     $codigo = $data['codigo'];
     $cantidad_de_stock = $data['cantidad_de_stock'];
+    $stock_de_emergencia = $data['stock_de_emergencia'];
     $precio = $data['precio'];
 
     // Verifica si ya existe un producto con el mismo codigo.
@@ -52,6 +53,7 @@ class ProductoWebformHandler extends WebformHandlerBase {
       'field_proveedor' => $proveedor,
       'field_nombre' => $nombre,
       'field_stock' => $cantidad_de_stock,
+      'field_stock_de_emergencia' => $stock_de_emergencia,
       'field_precio' => $precio,
       'status' => 1,
     ]);
