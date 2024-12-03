@@ -56,6 +56,15 @@ class FacturaDataHandler {
       // Cargar datos del producto
       $item = Node::load($productos[$i]['producto']);
 
+      // Verificar si hay suficientes unidades en existencia
+      if ($item->get('field_stock')->value < $productos[$i]['cantidad']) {
+        \Drupal::messenger()->addError('
+          No hay suficientes unidades del producto: ' . $item->get('field_nombre')->value . 
+          ', Unidades en existencia: ' . $item->get('field_stock')->value
+        );
+        return false;
+      }
+
       $invoice_details[$i]['itemCode'] = $item->get('field_codigo')->value;
       $invoice_details[$i]['itemName'] = $item->get('field_nombre')->value;
       $invoice_details[$i]['price'] = $item->get('field_precio')->value;
@@ -70,6 +79,7 @@ class FacturaDataHandler {
       }
     }
 
+    $factura['paymentMeanCode'] = $values['forma_de_pago'];
     $factura['invoiceDetails'] = $invoice_details;
     $factura['totals']['amount'] = $amount;
 

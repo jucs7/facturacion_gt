@@ -7,6 +7,7 @@ use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\WebformSubmissionInterface;
 use Drupal\facturacion_gt\Handler\FacturaDataHandler;
 use Drupal\facturacion_gt\Handler\FacturaNodeHandler;
+use Drupal\facturacion_gt\Handler\StockHandler;
 use Drupal\facturacion_gt\Service\ApiClient;
 
 /**
@@ -57,6 +58,10 @@ class FacturarWebformHandler extends WebformHandlerBase {
       // Utilizar FacturaDataHandler para ingresar valores en la factura.
       $facturaHandler = new FacturaDataHandler();
       $factura_data = $facturaHandler->prepareFacturaData($values, $factura_data);
+
+      if (!$factura_data) {
+        return;
+      }
   
       // Guardar los nuevos datos en el archivo JSON.
       file_put_contents($json_file, json_encode($factura_data, JSON_PRETTY_PRINT));
@@ -79,6 +84,10 @@ class FacturarWebformHandler extends WebformHandlerBase {
         // Crear contenido de tipo factura electronica
         $nodeHandler = new FacturaNodeHandler($response['data']);
         $nodeHandler->createFacturaNode();
+
+        // Reducir stock
+        $stockHandler = new StockHandler();
+        $stockHandler->reducirStock($values['productos_composite']);
   
         \Drupal::messenger()->addMessage($response['message']);
       } else {

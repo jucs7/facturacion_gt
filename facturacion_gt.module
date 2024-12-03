@@ -5,8 +5,6 @@
  * Facturación GT module.
  */
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\user\Entity\User;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -27,8 +25,11 @@ function facturacion_gt_theme($existing, $type, $theme, $path) {
  */
 function facturacion_gt_form_alter(&$form, FormStateInterface $form_state, $form_id) {
 
+  // formulario_feature()
+
   facturar_custom_composite($form, $form_state, $form_id);
   facturar_ajax($form, $form_state, $form_id);
+  ingreso_stock_custom_composite($form, $form_state, $form_id);
 
 }
 
@@ -52,13 +53,11 @@ function facturar_custom_composite(&$form, FormStateInterface $form_state, $form
         '#weight' => 1,
         '#title' => 'Producto',
         '#placeholder' => 'Producto',
-        // '#select2' => true,
         '#target_type' => 'node',
         '#selection_handler' => 'default:node',
         '#selection_settings' => [
           'target_bundles' => [
-            'producto' => 'producto',
-            'servicios' => 'servicios'
+            'producto' => 'producto'
           ],
           'sort' => [
             'field' => 'title',
@@ -106,4 +105,46 @@ function facturar_ajax(&$form, FormStateInterface $form_state, $form_id) {
     $form['#attached']['library'][] = 'facturacion_gt/facturar_webform_autofill';
   }
 
+}
+
+// Implementar campos para custom composite para productos en formulario de ingreso de stock
+function ingreso_stock_custom_composite(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id === 'webform_submission_ingreso_de_stock_add_form') {
+    if (isset($form['elements']['productos'])) {
+      // Ocultar primer campo
+      $fields['hidden'] = [
+        '#display' => 'none'
+      ];
+
+      // Campos personalizados
+      $fields['producto'] = [
+        '#type' => 'entity_autocomplete',
+        '#required' => true,
+        '#weight' => 0,
+        '#title' => 'Producto',
+        '#placeholder' => 'Producto',
+        '#target_type' => 'node',
+        '#selection_handler' => 'default:node',
+        '#selection_settings' => [
+          'target_bundles' => [
+            'producto' => 'producto'
+          ],
+          'sort' => [
+            'field' => 'title',
+            'direction' => 'ASC'
+          ]
+        ]
+      ];
+
+      $fields['cantidad'] = [
+        '#type' => 'number',
+        '#required' => true,
+        '#weight' => 1,
+        '#title' => 'Cantidad',
+        '#placeholder' => 'Cantidad'
+      ];
+
+      $form['elements']['productos']['#element'] = $fields;
+    }
+  }
 }
