@@ -39,6 +39,7 @@ class ClienteWebformHandler extends WebformHandlerBase {
     $user->setUsername($data['identificacion']); // Identificación como username.
     $user->setEmail($data['email']);
     $user->setPassword("clientecomercio"); // Generar una contraseña segura.
+    $user->status = 1;
 
     // Agregar roles.
     $user->addRole('cliente'); // Asegúrate de que este rol exista.

@@ -3,13 +3,13 @@
 namespace Drupal\facturacion_gt\Handler;
 
 use Drupal\node\Entity\Node;
+use Drupal\facturacion_gt\Handler\StockAlertHandler;
 
 class StockHandler {
 
   public function ingresarStock(array $productos) {
 
     for ($i = 0; $i < count($productos); $i++) {
-      // Cargar nodo del producto
       $producto = Node::load($productos[$i]['producto']);
 
       // Obtener valor del stock actual e incrementarlo
@@ -19,6 +19,9 @@ class StockHandler {
       $producto->set('field_stock', $stock_inc);
 
       $producto->save();
+
+      $alertHandler = new StockAlertHandler($producto);
+      $alertHandler->deleteAlerts();
 
       \Drupal::logger('facturacion_gt')->notice('INGRESO DE STOCK, @PRODUCTO/@CANTIDAD/@EXISTENCIAS', [
         '@PRODUCTO' => $producto->get('field_nombre')->value,
