@@ -40,15 +40,15 @@ class StockHandler {
 
       // Obtener valor del stock actual y reducirlo
       $stock_actual = $producto->get('field_stock')->value;
-      $stock_inc = $stock_actual - $productos[$i]['cantidad'];
+      $stock_red = $stock_actual - ($productos[$i]['cantidad'] ?? 1);
 
-      $producto->set('field_stock', $stock_inc);
+      $producto->set('field_stock', $stock_red);
 
       $producto->save();
 
       \Drupal::logger('facturacion_gt')->notice('REDUCCION DE STOCK, @PRODUCTO/@CANTIDAD/@EXISTENCIAS', [
         '@PRODUCTO' => $producto->get('field_nombre')->value,
-        '@CANTIDAD' => $productos[$i]['cantidad'],
+        '@CANTIDAD' => ($productos[$i]['cantidad'] ?? 1),
         '@EXISTENCIAS' => $producto->get('field_stock')->value,
       ]);
 

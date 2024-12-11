@@ -10,7 +10,7 @@ facturacion_gt.webform_facturar:
   path: '/facturacion-gt/facturar'
   defaults:
     _controller: '\Drupal\facturacion_gt\Controller\FacturacionGtController::renderFacturarTemplate'
-    _title: 'Factura electronica'
+    _title: 'Facturar'
   requirements:
     _permission: 'access content'
 

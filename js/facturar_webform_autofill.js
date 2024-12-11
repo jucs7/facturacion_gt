@@ -3,7 +3,9 @@
       attach: function (context) {    
         const clienteField = context.querySelector('#edit-cliente'); // Campo "cliente"
         const productosFields = context.querySelectorAll('#productos_composite_table input.form-element--api-entity-autocomplete'); // Campos de "producto"
-        const cantidadFields = context.querySelectorAll('#productos_composite_table input[name*="[cantidad]"]'); // Campos de "cantidad"
+        const serviciosFields = context.querySelectorAll('#servicios_composite_table input.form-element--api-entity-autocomplete'); // Campos de "servicio de alquiler"
+        const cantidadProductosFields = context.querySelectorAll('#productos_composite_table input[name*="[cantidad]"]'); // Campos de "cantidad"
+        const diasServiciosFields = context.querySelectorAll('input[name*="[dias]"]'); // Campos de "Dias"
 
         if (clienteField) {
           // Asegurar de que solo se asigne el evento una vez
@@ -81,6 +83,7 @@
                     const precioField = field.closest('tr').querySelector('input[name*="[precio]"]');
                     const cantidadField = field.closest('tr').querySelector('input[name*="[cantidad]"]');
                     const subtotalField = field.closest('tr').querySelector('input[name*="[subtotal]"]');
+                    const stockField = field.closest('tr').querySelector('input[name*="[stock]"]');
 
                     if (precioField) {
                       precioField.value = data.field_precio;
@@ -93,6 +96,10 @@
                     if (subtotalField) {
                       subtotalField.value = precioField.value * cantidadField.value;
                     }
+
+                    if (stockField) {
+                      stockField.value = data.field_stock;
+                    }
                   })
                   .catch(error => {
                     console.error('Hubo un problema con la solicitud AJAX:', error);
@@ -103,8 +110,46 @@
           });
         }
 
-        if (cantidadFields) {
-          cantidadFields.forEach((field) => {
+        if (serviciosFields) {
+          serviciosFields.forEach((field) => {
+            // Asegurar de que solo se asigne el evento una vez
+            if (!field.hasAttribute('data-autofill-initialized')) {
+              field.setAttribute('data-autofill-initialized', 'true');
+              
+              field.addEventListener('change', function (event) { 
+                const value = field.value;
+
+                // Extrae el ID del texto ingresado (formato: "Producto (ID)")
+                const match = value.match(/\((\d+)\)$/); // Busca un número entre paréntesis al final
+                const pid = match ? match[1] : null;
+
+                if (pid) {
+                  fetch(`/facturacion-gt/product-data/${pid}`)
+                  .then(response => {
+                    if (!response.ok) {
+                      throw new Error('Error al obtener los datos del producto');
+                    }
+                    return response.json();
+                  })
+                  .then(data => {
+                    // Rellena los campos con valores obtenidos
+                    const stockField = field.closest('tr').querySelector('input[name*="[stock]"]');
+
+                    if (stockField) {
+                      stockField.value = data.field_stock;
+                    }
+                  })
+                  .catch(error => {
+                    console.error('Hubo un problema con la solicitud AJAX:', error);
+                  });
+                }
+              });
+            }
+          });
+        }
+
+        if (cantidadProductosFields) {
+          cantidadProductosFields.forEach((field) => {
             // Asegurar de que solo se asigne el evento una vez
             if (!field.hasAttribute('data-autofill-initialized')) {
               field.setAttribute('data-autofill-initialized', 'true');
@@ -117,6 +162,26 @@
 
                 if (precioField && subtotalField) {
                   subtotalField.value = precioField.value * cantidadValue;
+                }
+              });
+            }
+          });
+        }
+
+        if (diasServiciosFields) {
+          diasServiciosFields.forEach((field) => {
+            // Asegurar de que solo se asigne el evento una vez
+            if (!field.hasAttribute('data-autofill-initialized')) {
+              field.setAttribute('data-autofill-initialized', 'true');
+
+              field.addEventListener('change', function (event) {
+                //Actualiza los campos con el valor obtenido
+                const diasValue = field.value;
+                const precioField = field.closest('tr').querySelector('input[name*="[precio_dia]"]');
+                const subtotalField = field.closest('tr').querySelector('input[name*="[subtotal]"]');
+
+                if (precioField && subtotalField) {
+                  subtotalField.value = precioField.value * diasValue;
                 }
               });
             }

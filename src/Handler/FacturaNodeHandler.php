@@ -4,6 +4,7 @@ namespace Drupal\facturacion_gt\Handler;
 
 use Drupal\user\Entity\User;
 use Drupal\node\Entity\Node;
+use Drupal\facturacion_gt\Handler\ServicioNodeHandler;
 
 class FacturaNodeHandler {
 
@@ -82,7 +83,68 @@ class FacturaNodeHandler {
       $identificationType = 'NUIP';
     }
 
-    // Crear contenido de tipo factura electrónica
+    // Detalle de productos y servicios 
+    $productos = $this->factura['productos_composite'];
+    $servicios = $this->factura['servicios_composite'];
+    $detalle = '';
+    $total = 0;
+
+    for ($i = 0; $i < count($productos); $i++) {
+      // Cargar datos del producto
+      $item = Node::load($productos[$i]['producto']);
+
+      // Verificar si hay suficientes unidades en existencia
+      if ($item->get('field_stock')->value < $productos[$i]['cantidad']) {
+        \Drupal::messenger()->addError('
+          No hay suficientes unidades del producto: ' . $item->get('field_nombre')->value . 
+          ', Unidades en existencia: ' . $item->get('field_stock')->value
+        );
+        return false;
+      }
+
+      $itemCode = $item->get('field_codigo')->value;
+      $itemName = $item->get('field_nombre')->value;
+      $price = $item->get('field_precio')->value;
+      $quantity = $productos[$i]['cantidad'];
+      $subtotal = $price * $quantity;
+
+      $detalle .= "Codigo: " . $itemCode . " | " .
+        "Producto: " . $itemName . " | " .
+        "Precio: " . $price . " | " .
+        "Cantidad: " . $quantity . " | " .
+        "Subtotal: " . $subtotal . "<br>"; 
+
+      $total += $subtotal;
+    }
+
+    for ($i =0; $i < count($servicios); $i++) {
+      // Cargar datos del producto alquilado
+      $item = Node::load($servicios[$i]['producto']);
+
+      // Verificar si hay suficientes unidades en existencia
+      if ($item->get('field_stock')->value < 1) {
+        \Drupal::messenger()->addError('
+          No hay suficientes unidades del producto: ' . $item->get('field_nombre')->value . 
+          ', Unidades en existencia: ' . $item->get('field_stock')->value
+        );
+        return false;
+      }
+
+      $itemName = $item->get('field_nombre')->value;
+      $diasAlquiler = $servicios[$i]['dias'];
+      $subtotal = $servicios[$i]['subtotal'];
+
+      $detalle .= "Alquiler de " . $itemName . " " . 
+        $diasAlquiler . " dias | Subtotal: " . $subtotal . "<br>";
+
+      $total += $subtotal;
+
+      // Crear contenido de tipo servicio de alquiler
+      $servicioNodeHandler = new ServicioNodeHandler();
+      $servicioNodeHandler->createAlquilerNode($item, $customer, $diasAlquiler, $subtotal);
+    }
+
+    // Crear contenido de tipo factura no electrónica
     $node = Node::create([
       'type' => 'factura_no_electronica',
       'title' => $this->factura['numero_de_factura'],
@@ -118,17 +180,22 @@ class FacturaNodeHandler {
         'value' => $customer->get('field_telefono')->value,
         'format' => 'plain_text',
       ],
-      'field_' => [
-        'value' => $this->factura[''],
+      'field_detalle' => [
+        'value' => $detalle,
         'format' => 'plain_text',
       ],
-      'field_' => [
-        'value' => $this->factura[''],
+      'field_valor' => [
+        'value' => $total,
         'format' => 'plain_text',
       ],
     ]);
 
     // Guardar contenido
     $node->save();
+
+    // Reducir stock de los productos
+    $stockHandler = new StockHandler();
+    $stockHandler->reducirStock($productos);
+    $stockHandler->reducirStock($servicios);
   }
 }

@@ -30,6 +30,7 @@ function facturacion_gt_form_alter(&$form, FormStateInterface $form_state, $form
   facturar_custom_composite($form, $form_state, $form_id);
   facturar_ajax($form, $form_state, $form_id);
   ingreso_stock_custom_composite($form, $form_state, $form_id);
+  actualizar_inventario_custom_composite($form, $form_state, $form_id);
 
 }
 
@@ -42,14 +43,14 @@ function facturar_custom_composite(&$form, FormStateInterface $form_state, $form
   if ($form_id === 'webform_submission_facturar_add_form') {
     if (isset($form['elements']['productos_composite'])) {
       // Ocultar primer campo
-      $fields['codigo_item'] = [
+      $productFields['codigo_item'] = [
         '#display' => 'none'
       ];
 
       // Campos personalizados
-      $fields['producto'] = [
+      $productFields['producto'] = [
         '#type' => 'entity_autocomplete',
-        '#required' => true,
+        '#required' => false,
         '#weight' => 1,
         '#title' => 'Producto',
         '#placeholder' => 'Producto',
@@ -66,33 +67,125 @@ function facturar_custom_composite(&$form, FormStateInterface $form_state, $form
         ]
       ];
       
-      $fields['precio'] = [
+      $productFields['stock'] = [
         '#type' => 'number',
         '#required' => false,
         '#weight' => 2,
+        '#title' => 'Stock disponible',
+        '#readonly' => true,
+        '#attributes' => [
+          'style' => 'width: 80px;'
+        ]
+      ];
+
+      $productFields['precio'] = [
+        '#type' => 'number',
+        '#min' => 0,
+        '#required' => false,
+        '#weight' => 3,
         '#title' => 'Precio',
         '#placeholder' => 'Precio',
-        '#readonly' => true
+        '#readonly' => true,
+        '#attributes' => [
+          'style' => 'width: 150px;'
+        ]
       ];
 
-      $fields['cantidad'] = [
+      $productFields['cantidad'] = [
         '#type' => 'number',
-        '#required' => true,
-        '#weight' => 3,
-        '#title' => 'Cantidad',
-        '#placeholder' => 'Cantidad'
-      ];
-      
-      $fields['subtotal'] = [
-        '#type' => 'number',
+        '#min' => 0,
         '#required' => false,
         '#weight' => 4,
+        '#title' => 'Cantidad',
+        '#attributes' => [
+          'style' => 'width: 80px;'
+        ]
+      ];
+      
+      $productFields['subtotal'] = [
+        '#type' => 'number',
+        '#required' => false,
+        '#weight' => 5,
         '#title' => 'Subtotal',
         '#placeholder' => 'Subtotal',
-        '#readonly' => true
+        '#readonly' => true,
+        '#attributes' => [
+          'style' => 'width: 150px;'
+        ]
       ];
 
-      $form['elements']['productos_composite']['#element'] = $fields;
+      $form['elements']['productos_composite']['#element'] = $productFields;
+    }
+
+    if (isset($form['elements']['servicios_composite'])) {
+
+      // Campos personalizados
+      $serviceFields['producto'] = [
+        '#type' => 'entity_autocomplete',
+        '#required' => false,
+        '#weight' => 1,
+        '#title' => 'Producto',
+        '#placeholder' => 'Producto',
+        '#target_type' => 'node',
+        '#selection_handler' => 'default:node',
+        '#selection_settings' => [
+          'target_bundles' => [
+            'producto' => 'producto'
+          ],
+          'sort' => [
+            'field' => 'title',
+            'direction' => 'ASC'
+          ]
+        ]
+      ];
+      
+      $serviceFields['stock'] = [
+        '#type' => 'number',
+        '#required' => false,
+        '#weight' => 2,
+        '#title' => 'Stock disponible',
+        '#readonly' => true,
+        '#attributes' => [
+          'style' => 'width: 80px;'
+        ]
+      ];
+
+      $serviceFields['precio_dia'] = [
+        '#type' => 'number',
+        '#min' => 0,
+        '#required' => false,
+        '#weight' => 3,
+        '#title' => 'Precio/Dia',
+        '#placeholder' => 'Precio/Dia',
+        '#attributes' => [
+          'style' => 'width: 150px;'
+        ]
+      ];
+
+      $serviceFields['dias'] = [
+        '#type' => 'number',
+        '#min' => 0,
+        '#required' => false,
+        '#weight' => 4,
+        '#title' => 'Dias',
+        '#attributes' => [
+          'style' => 'width: 80px;'
+        ]
+      ];
+      
+      $serviceFields['subtotal'] = [
+        '#type' => 'number',
+        '#required' => false,
+        '#weight' => 5,
+        '#title' => 'Subtotal',
+        '#placeholder' => 'Subtotal',
+        '#readonly' => true,
+        '#attributes' => [
+          'style' => 'width: 150px;'
+        ]
+      ];
+
+      $form['elements']['servicios_composite']['#element'] = $serviceFields;
     }
   }
 
@@ -142,6 +235,48 @@ function ingreso_stock_custom_composite(&$form, FormStateInterface $form_state, 
         '#weight' => 1,
         '#title' => 'Cantidad',
         '#placeholder' => 'Cantidad'
+      ];
+
+      $form['elements']['productos']['#element'] = $fields;
+    }
+  }
+}
+
+// Implementar campos para custom composite para productos en formulario de ingreso de stock
+function actualizar_inventario_custom_composite(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id === 'webform_submission_actualizar_inventario_add_form') {
+    if (isset($form['elements']['productos'])) {
+      // Ocultar primer campo
+      $fields['hidden'] = [
+        '#display' => 'none'
+      ];
+
+      // Campos personalizados
+      $fields['producto'] = [
+        '#type' => 'entity_autocomplete',
+        '#required' => true,
+        '#weight' => 0,
+        '#title' => 'Producto',
+        '#placeholder' => 'Producto',
+        '#target_type' => 'node',
+        '#selection_handler' => 'default:node',
+        '#selection_settings' => [
+          'target_bundles' => [
+            'producto' => 'producto'
+          ],
+          'sort' => [
+            'field' => 'title',
+            'direction' => 'ASC'
+          ]
+        ]
+      ];
+
+      $fields['stock'] = [
+        '#type' => 'number',
+        '#required' => true,
+        '#weight' => 1,
+        '#title' => 'Stock',
+        '#placeholder' => 'Stock'
       ];
 
       $form['elements']['productos']['#element'] = $fields;
