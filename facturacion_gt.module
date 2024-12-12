@@ -31,6 +31,7 @@ function facturacion_gt_form_alter(&$form, FormStateInterface $form_state, $form
   facturar_ajax($form, $form_state, $form_id);
   ingreso_stock_custom_composite($form, $form_state, $form_id);
   actualizar_inventario_custom_composite($form, $form_state, $form_id);
+  actualizar_inventario_ajax($form, $form_state, $form_id);
 
 }
 
@@ -191,7 +192,7 @@ function facturar_custom_composite(&$form, FormStateInterface $form_state, $form
 
 }
 
-// Autocompletar campos con ajax
+// Autocompletar campos con ajax en webform facturar
 function facturar_ajax(&$form, FormStateInterface $form_state, $form_id) {
   
   if ($form_id === 'webform_submission_facturar_add_form') {
@@ -281,5 +282,12 @@ function actualizar_inventario_custom_composite(&$form, FormStateInterface $form
 
       $form['elements']['productos']['#element'] = $fields;
     }
+  }
+}
+
+// Autocompletar campos con ajax en webform actualizar inventario
+function actualizar_inventario_ajax(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id === 'webform_submission_actualizar_inventario_add_form') {
+    $form['#attached']['library'][] = 'facturacion_gt/actualizar_inventario_webform_autofill';
   }
 }

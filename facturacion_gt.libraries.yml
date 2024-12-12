@@ -5,3 +5,11 @@ facturar_webform_autofill:
     - core/jquery
     - core/drupal
     - core/drupal.ajax
+
+actualizar_inventario_webform_autofill:
+  js:
+    js/actualizar_inventario_webform_autofill.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupal.ajax
