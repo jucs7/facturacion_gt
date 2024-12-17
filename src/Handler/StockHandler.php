@@ -7,8 +7,23 @@ use Drupal\facturacion_gt\Handler\StockAlertHandler;
 
 class StockHandler {
 
-  public function ingresarStock(array $productos) {
+  public function actualizarStock(array $productos) {
+    for ($i = 0; $i < count($productos); $i++) {
+      $producto = Node::load($productos[$i]['producto']);
 
+      // Obtener valor del stock actual y actualizarlo
+      $stock = $producto->get('field_stock')->value;
+      $stock_actualizado = $productos[$i]['stock_actualizado'];
+
+      $producto->set('field_stock', $stock_actualizado);
+      $producto->save();
+
+      $alertHandler = new StockAlertHandler($producto);
+      $alertHandler->deleteAlerts();
+    }
+  }
+
+  public function ingresarStock(array $productos) {
     for ($i = 0; $i < count($productos); $i++) {
       $producto = Node::load($productos[$i]['producto']);
 
@@ -17,7 +32,6 @@ class StockHandler {
       $stock_inc = $stock_actual + $productos[$i]['cantidad'];
 
       $producto->set('field_stock', $stock_inc);
-
       $producto->save();
 
       $alertHandler = new StockAlertHandler($producto);
@@ -28,9 +42,7 @@ class StockHandler {
         '@CANTIDAD' => $productos[$i]['cantidad'],
         '@EXISTENCIAS' => $producto->get('field_stock')->value,
       ]);
-
     }
-
 	}
 
   public function reducirStock(array $productos) {

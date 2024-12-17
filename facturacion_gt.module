@@ -275,9 +275,18 @@ function actualizar_inventario_custom_composite(&$form, FormStateInterface $form
       $fields['stock'] = [
         '#type' => 'number',
         '#required' => true,
+        '#readonly' => true,
         '#weight' => 1,
         '#title' => 'Stock',
         '#placeholder' => 'Stock'
+      ];
+
+      $fields['stock_actualizado'] = [
+        '#type' => 'number',
+        '#required' => true,
+        '#weight' => 2,
+        '#title' => 'Stock actualizado',
+        '#placeholder' => 'Stock actualizado'
       ];
 
       $form['elements']['productos']['#element'] = $fields;
