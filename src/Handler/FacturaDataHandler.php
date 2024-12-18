@@ -46,8 +46,9 @@ class FacturaDataHandler {
     $factura['customer']['responsibilities'] = $customer->get('field_responsabilidades_fiscales')->value;
     $factura['customer']['regimeType'] = $customer->get('field_tipo_de_regimen')->value;
 
-    // Obtener productos
+    // Obtener productos y servicios
     $productos = $values['productos_composite'];
+    $servicios = $values['servicios_composite'];
     $invoice_details = $factura['invoiceDetails'];
     $invoice_details = array_slice($invoice_details, 0, 1);
     
@@ -77,6 +78,24 @@ class FacturaDataHandler {
       if ($i != count($productos) - 1) {
         $invoice_details[] = $invoice_details[$i];
       }
+    }
+
+    for ($i = 0; $i < count($servicios); $i++) {
+      $servicio = Node::load($servicios[$i]['servicio']);
+      $invoice_details_servicios = [];
+
+      $invoice_details_servicios[$i]['itemCode'] = $servicio->get('field_codigo')->value;
+      $invoice_details_servicios[$i]['itemName'] = $servicio->get('field_nombre')->value;
+      $invoice_details_servicios[$i]['price'] = $servicio->get('field_precio')->value;
+      $invoice_details_servicios[$i]['quantity'] = $servicios[$i]['horas'];
+
+      // Sumar al total
+      $amount += floatval($servicio->get('field_precio')->value) * floatval($servicios[$i]['horas']);
+
+      // Verificar si hay más servicios y agregarlo
+      $invoice_details[] = $invoice_details_servicios[$i];
+      //if ($i != count($productos) - 1) {
+      //}
     }
 
     $factura['paymentMeanCode'] = $values['forma_de_pago'];

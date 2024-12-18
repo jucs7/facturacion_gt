@@ -31,3 +31,12 @@ facturacion_gt.facturar_product_data:
   requirements:
     _permission: 'access content'
     pid: '\d+'
+
+facturacion_gt.servicios:
+  path: '/facturacion-gt/servicios-data/{sid}'
+  defaults:
+    _controller: '\Drupal\facturacion_gt\Controller\ServiciosController::getServicio'
+    _title: 'Get Service Data'
+  requirements:
+    _permission: 'access content'
+    pid: '\d+'

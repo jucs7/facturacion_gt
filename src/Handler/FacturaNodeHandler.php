@@ -119,29 +119,15 @@ class FacturaNodeHandler {
 
     for ($i =0; $i < count($servicios); $i++) {
       // Cargar datos del producto alquilado
-      $item = Node::load($servicios[$i]['producto']);
+      $servicio = Node::load($servicios[$i]['servicio']);
 
-      // Verificar si hay suficientes unidades en existencia
-      if ($item->get('field_stock')->value < 1) {
-        \Drupal::messenger()->addError('
-          No hay suficientes unidades del producto: ' . $item->get('field_nombre')->value . 
-          ', Unidades en existencia: ' . $item->get('field_stock')->value
-        );
-        return false;
-      }
-
-      $itemName = $item->get('field_nombre')->value;
-      $diasAlquiler = $servicios[$i]['dias'];
+      $serviceName = $servicio->get('field_nombre')->value;
+      $diasAlquiler = $servicios[$i]['horas'];
       $subtotal = $servicios[$i]['subtotal'];
 
-      $detalle .= "Alquiler de " . $itemName . " " . 
-        $diasAlquiler . " dias | Subtotal: " . $subtotal . "<br>";
+      $detalle .= $serviceName . " | " . $diasAlquiler . " dias | Subtotal: " . $subtotal . "<br>";
 
       $total += $subtotal;
-
-      // Crear contenido de tipo servicio de alquiler
-      $servicioNodeHandler = new ServicioNodeHandler();
-      $servicioNodeHandler->createAlquilerNode($item, $customer, $diasAlquiler, $subtotal);
     }
 
     // Crear contenido de tipo factura no electrónica
@@ -182,7 +168,7 @@ class FacturaNodeHandler {
       ],
       'field_detalle' => [
         'value' => $detalle,
-        'format' => 'plain_text',
+        'format' => 'basic_html',
       ],
       'field_valor' => [
         'value' => $total,
@@ -196,6 +182,5 @@ class FacturaNodeHandler {
     // Reducir stock de los productos
     $stockHandler = new StockHandler();
     $stockHandler->reducirStock($productos);
-    $stockHandler->reducirStock($servicios);
   }
 }

@@ -50,7 +50,7 @@ class FacturarWebformHandler extends WebformHandlerBase {
       $nodeHandler = new FacturaNodeHandler($values);
       $nodeHandler->createFacturaNoElecNode();
 
-      \Drupal::messenger()->addMessage('Factura electrónica creada correctamente');
+      \Drupal::messenger()->addMessage('Factura no electrónica creada correctamente');
     }
     // Factura electronica
     else {
